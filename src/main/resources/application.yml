@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/fellow_travelers
+    username: postgres
+    password: 111
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
