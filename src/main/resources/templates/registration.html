@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+<section class="position-relative py-32 bg-white overflow-hidden">
+    <div class="position-relative container" style="z-index:1;">
+        <div class="mb-7 text-center mw-md mx-auto">
+            <h2 class="font-heading mb-4 fs-7">Регистрация</h2>
+        </div>
+        <form class="mw-sm mx-auto" style="width: 50%" id="registerForm" th:object="${registerUser}" th:method="POST" th:action="@{/signUp}">
+            <div class="mb-4 row g-6">
+                <div class="form-group">
+                    <label class="mb-1 fw-medium text-light-dark" for="first-name-input"></label>
+                    <input th:field="*{firstName}" class="form-control text-secondary-dark shadow" id="first-name-input" type="text" placeholder="Имя">
+                    <p style="color: red"
+                       th:if="${#fields.hasErrors('firstName')}"
+                       th:errors="*{firstName}">
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="mb-1 fw-medium text-light-dark" for="last-name-input"></label>
+                    <input th:field="*{lastName}" class="form-control text-secondary-dark shadow" id="last-name-input" type="text" placeholder="Фамилия">
+                    <p style="color: red"
+                       th:if="${#fields.hasErrors('lastName')}"
+                       th:errors="*{lastName}">
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="mb-1 fw-medium text-light-dark" for="phone-input"></label>
+                    <input th:field="*{phoneNumber}" class="form-control text-secondary-dark shadow" id="phone-input" type="text" placeholder="Телефон">
+                    <p style="color: red"
+                       th:if="${#fields.hasErrors('phoneNumber')}"
+                       th:errors="*{phoneNumber}">
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="mb-1 fw-medium text-light-dark" for="birthdate-input"></label>
+                    <input th:field="*{birthDate}" class="form-control text-secondary-dark shadow" id="birthdate-input" type="text" placeholder="Дата рождения в формате дд.мм.гггг">
+                    <p style="color: red"
+                       th:if="${#fields.hasErrors('birthDate')}"
+                       th:errors="*{birthDate}">
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="mb-1 fw-medium text-light-dark" for="email-input"></label>
+                    <input th:field="*{email}" class="form-control text-secondary-dark shadow" id="email-input" type="email" placeholder="Email">
+                    <p style="color: red"
+                       th:if="${#fields.hasErrors('email')}"
+                       th:errors="*{email}">
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="mb-1 fw-medium text-light-dark" for="password-input"></label>
+                    <input th:field="*{password}" class="form-control text-secondary-dark shadow" id="password-input" type="password" placeholder="Пароль">
+                    <p style="color: red"
+                       th:if="${#fields.hasErrors('password')}"
+                       th:errors="*{password}">
+                    </p>
+                </div>
+                <div class="form-check" style="padding: 12px">
+                    <input class="form-check-input" th:field="*{driver}" type="checkbox"  id="is-driver-input"/>
+                    <label class="form-check-label" for="is-driver-input">Водитель</label>
+                </div>
+            </div>
+            <div class="mb-6 row">
+                <button class="btn btn-lg btn-success fs-11 py-3 w-100 text-success-light shadow" type="submit">Зарегистрироваться</button>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

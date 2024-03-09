@@ -1,33 +1,39 @@
 package ru.sber.fellow_travelers.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import ru.sber.fellow_travelers.entity.car.Car;
+import ru.sber.fellow_travelers.entity.enums.RoleType;
+import ru.sber.fellow_travelers.util.LocalDateUtils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name", nullable = false, length = 30)
     private String firstName;
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name", nullable = false, length = 30)
     private String lastName;
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
     @Column(name = "birth_date", nullable = false)
-    private String birthDate;
-    @ManyToMany(cascade = CascadeType.ALL)
+    private LocalDate birthDate;
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
@@ -45,14 +51,46 @@ public class User {
 
     public User() { }
 
-    public User(String email, String password, String firstName,
-                String lastName, String phoneNumber, String birthDate) {
+    public User(long id, String email, String password, String firstName,
+                String lastName, String phoneNumber, String birthDate, Set<Role> roles) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.birthDate = birthDate;
+        this.birthDate = LocalDate.parse(birthDate);
+        this.roles = roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public Long getId() {
@@ -79,8 +117,26 @@ public class User {
         return phoneNumber;
     }
 
-    public String getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    private List<RoleType> getUserRoleTypes() {
+        return roles.stream()
+                .map(Role::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    public boolean isAdmin() {
+        return getUserRoleTypes().contains(RoleType.ADMIN);
+    }
+
+    public boolean isDriver() {
+        return getUserRoleTypes().contains(RoleType.DRIVER);
     }
 
     public void setId(Long id) {
@@ -108,6 +164,6 @@ public class User {
     }
 
     public void setBirthDate(String birthDate) {
-        this.birthDate = birthDate;
+        this.birthDate = LocalDateUtils.convertToISO(birthDate);
     }
 }

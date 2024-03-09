@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Водитель</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css} "/>
+</head>
+<body>
+    <p>Привет, водитель!</p>
+    <a href="/logout" class="nav-link active" th:if="${session.containsKey('user')}">Выйти</a>
+</body>
+</html>

@@ -6,4 +6,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-    defer-datasource-initialization: true
+app:
+  jwt:
+    secret-key: XmRmyPcUVL5VUhR+sfLtbdOvu2tEkGhqEMeKdC7B9LyrQTKa7E8qiROierc7TGVDg6IF0M98wCRt30wXCyjh7A==
+    expiration-time: 86400000 #1 day in ms
+    header-name: jwt
