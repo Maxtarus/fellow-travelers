@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.sber.fellow_travelers.dto.RegisterUserDTO;
+import ru.sber.fellow_travelers.dto.UserDTO;
 import ru.sber.fellow_travelers.entity.User;
 import ru.sber.fellow_travelers.entity.enums.RoleType;
 import ru.sber.fellow_travelers.repository.RoleRepository;
@@ -38,7 +38,7 @@ public class AuthService {
     }
 
     @Transactional
-    public User signUp(RegisterUserDTO registerUser) {
+    public User signUp(UserDTO registerUser) {
         User user = new User();
         user.setEmail(registerUser.getEmail());
         user.setPassword(passwordEncoder.encode(registerUser.getPassword()));
@@ -46,10 +46,10 @@ public class AuthService {
         user.setLastName(registerUser.getLastName());
         user.setPhoneNumber(registerUser.getPhoneNumber());
         user.setBirthDate(registerUser.getBirthDate());
-        user.getRoles().add(roleRepository.findByTitle(RoleType.PASSENGER));
+        user.getRoles().add(roleRepository.findByType(RoleType.PASSENGER));
 
         if (registerUser.isDriver()) {
-            user.getRoles().add(roleRepository.findByTitle(RoleType.DRIVER));
+            user.getRoles().add(roleRepository.findByType(RoleType.DRIVER));
         }
 
         user = userRepository.save(user);

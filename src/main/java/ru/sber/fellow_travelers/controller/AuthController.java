@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import ru.sber.fellow_travelers.dto.RegisterUserDTO;
+import ru.sber.fellow_travelers.dto.UserDTO;
 import ru.sber.fellow_travelers.entity.User;
-import ru.sber.fellow_travelers.entity.enums.RoleType;
 import ru.sber.fellow_travelers.service.AuthService;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -57,7 +55,7 @@ public class AuthController {
         response.addCookie(authService.getAuthorizeCookie(user));
 
         if (user.isAdmin()) {
-            response.sendRedirect("/admin");
+            response.sendRedirect("/admin/userList");
         } else if (user.isDriver()) {
             response.sendRedirect("/driver");
         } else {
@@ -70,13 +68,13 @@ public class AuthController {
     @GetMapping("/signUp")
     public ModelAndView registrationPage() {
         ModelAndView view = new ModelAndView("registration");
-        view.addObject("registerUser", new RegisterUserDTO());
+        view.addObject("registerUser", new UserDTO());
         return view;
     }
 
     @PostMapping("/signUp")
     public Object signUp(
-            @ModelAttribute("registerUser") @Valid RegisterUserDTO registerUser,
+            @ModelAttribute("registerUser") @Valid UserDTO registerUser,
             BindingResult result,
             HttpServletResponse response,
             HttpSession session

@@ -57,17 +57,20 @@ public class SecurityConfig {
         http
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers(mvc.pattern("/auth/**")).permitAll()
                         .requestMatchers(mvc.pattern("/signIn")).permitAll()
                         .requestMatchers(mvc.pattern("/signUp")).permitAll()
                         .requestMatchers(mvc.pattern("/")).permitAll()
                         .requestMatchers(mvc.pattern("/webjars/bootstrap/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/admin/**")).authenticated()
                         .anyRequest().authenticated())
                 .formLogin(configurer -> configurer.loginPage("/"))
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/signIn")
+                        .deleteCookies("jwt"));
 
         return http.build();
     }

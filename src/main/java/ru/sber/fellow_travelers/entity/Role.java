@@ -14,36 +14,36 @@ public class Role implements GrantedAuthority {
     @Column(name = "id", nullable = false)
     private Long id;
     @Enumerated(EnumType.STRING)
-    @Column(name = "title")
-    private RoleType title;
+    @Column(name = "type")
+    private RoleType type;
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
     public Role() { }
 
-    public Role(long id, RoleType title) {
+    public Role(long id, RoleType type) {
         this.id = id;
-        this.title = title;
+        this.type = type;
     }
 
     @Override
     public String getAuthority() {
-        return "ROLE_" + title;
+        return "ROLE_" + type;
     }
 
     public Long getId() {
         return id;
     }
 
-    public RoleType getTitle() {
-        return title;
+    public RoleType getType() {
+        return type;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setRole(RoleType title) {
-        this.title = title;
+    public void setRole(RoleType type) {
+        this.type = type;
     }
 }

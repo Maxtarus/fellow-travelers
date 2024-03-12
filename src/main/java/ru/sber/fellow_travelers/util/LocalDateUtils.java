@@ -10,4 +10,8 @@ public final class LocalDateUtils {
     public static LocalDate convertToISO(String date) {
         return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.ENGLISH));
     }
+
+    public static String convertToInputFormat(LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
 }

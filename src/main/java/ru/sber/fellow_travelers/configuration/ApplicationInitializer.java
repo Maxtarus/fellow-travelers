@@ -37,12 +37,43 @@ public class ApplicationInitializer implements CommandLineRunner {
                 )
         );
 
-        userRepository.save(
-                new User(1L, "admin@mail.ru",
-                        passwordEncoder.encode("admin"),
-                        "Admin", "Admin", "89997775544", "2000-01-01",
-                        Set.of(getRoles().get(0)))
+        userRepository.saveAll(
+                List.of(
+                        new User(1L, "admin@mail.ru",
+                            passwordEncoder.encode("admin"),
+                            "Admin", "Admin", "89997775544", "2000-01-01",
+                            Set.of(getRoles().get(0))),
+                        new User(2L, "starmax@yandex.ru",
+                                passwordEncoder.encode("qwerty"),
+                                "Максим", "Старостин", "89008887733", "2001-11-11",
+                                Set.of(getRoles().get(1), getRoles().get(2))),
+                        new User(3L, "imosolov@gmail.com",
+                                passwordEncoder.encode("zaq1"),
+                                "Иван", "Мосолов", "89886541832", "2000-09-02",
+                                Set.of(getRoles().get(2))),
+                        new User(4L, "www@gmail.com",
+                                passwordEncoder.encode("zaq1"),
+                                "Иван", "Золо", "89886541832", "2000-09-02",
+                                Set.of(getRoles().get(2))),
+                        new User(5L, "web@gmail.com",
+                                passwordEncoder.encode("zaq1"),
+                                "Артем", "Жолнин", "89886541832", "2000-09-02",
+                                Set.of(getRoles().get(1))),
+                        new User(6L, "sssss@gmail.com",
+                                passwordEncoder.encode("zaq1"),
+                                "Николай", "Орлов", "89886541832", "2000-09-02",
+                                Set.of(getRoles().get(1))),
+                        new User(7L, "dddd@gmail.com",
+                                passwordEncoder.encode("zaq1"),
+                                "Андрей", "Орлов", "89886541832", "2000-09-02",
+                                Set.of(getRoles().get(1))),
+                        new User(8L, "kkkk@gmail.com",
+                                passwordEncoder.encode("zaq1"),
+                                "Андрей", "Орлов", "89886541832", "2000-09-02",
+                                Set.of(getRoles().get(1)))
+                )
         );
+
     }
 
     private List<Role> getRoles() {
