@@ -1,7 +1,8 @@
 package ru.sber.fellow_travelers.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -10,57 +11,55 @@ import ru.sber.fellow_travelers.dto.UserDTO;
 import ru.sber.fellow_travelers.entity.User;
 import ru.sber.fellow_travelers.exception.UserNotFoundException;
 import ru.sber.fellow_travelers.mapper.UserMapper;
-import ru.sber.fellow_travelers.service.AuthService;
+import ru.sber.fellow_travelers.security.utils.AuthUtils;
 import ru.sber.fellow_travelers.service.UserService;
+import ru.sber.fellow_travelers.service.impl.UserServiceImpl;
 import ru.sber.fellow_travelers.thymeleaf.Counter;
 
-import java.io.IOException;
-
 @Controller
-@RequestMapping("/admin")
-public class AdminController {
+//@RequestMapping("/admin")
+public class UserController {
+    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
     private final UserService userService;
-    private final AuthService authService;
     private final UserMapper userMapper;
 
-    public AdminController(UserService userService, AuthService authService, UserMapper userMapper) {
+    public UserController(UserServiceImpl userService, UserMapper userMapper) {
         this.userService = userService;
-        this.authService = authService;
         this.userMapper = userMapper;
     }
 
-    @GetMapping("/userList")
+    @GetMapping("/registeredUsers")
     public ModelAndView showAdminProfilePage() {
         ModelAndView view = new ModelAndView("admin/adminProfile");
+        view.addObject("me", AuthUtils.getUserFromContext());
         view.addObject("users", userService.findAll());
         view.addObject("counter", new Counter());
         return view;
     }
 
     @PostMapping("deleteUser/{id}")
-    public void deleteUser(@PathVariable("id") long id, HttpServletResponse response) throws IOException {
+    public String deleteUser(@PathVariable("id") long id) {
         userService.deleteById(id);
-        response.sendRedirect("/admin");
+        return "redirect:/registeredUsers";
     }
 
     @GetMapping("/addUser")
-    public ModelAndView showAddNewUserPage() {
+    public ModelAndView showAddUserPage() {
         ModelAndView view = new ModelAndView("admin/addUser");
-        view.addObject("registerUser", new UserDTO());
+        view.addObject("user", new UserDTO());
         return view;
     }
 
     @PostMapping("/addUser")
-    public Object addUser(@ModelAttribute("registerUser") @Valid UserDTO registerUser,
-                          BindingResult result,
-                          HttpServletResponse response) throws IOException {
+    public String addUser(@ModelAttribute("user") @Valid UserDTO userDTO,
+                          BindingResult result) {
         if (result.hasErrors()) {
             return "admin/addUser";
         }
 
-        authService.signUp(registerUser);
-        response.sendRedirect("/admin");
-        return null;
+        User user = userMapper.toEntity(userDTO);
+        userService.save(user);
+        return "redirect:/registeredUsers";
     }
 
     @GetMapping("/editUser/{id}")
@@ -69,32 +68,27 @@ public class AdminController {
 
         try {
             User userEntity = userService.findById(id);
-            UserDTO user = userMapper.toDTO(userEntity);
-            view.addObject("userDTO", user);
+            view.addObject("user", userMapper.toDTO(userEntity));
             view.addObject("userId", userEntity.getId());
         } catch (UserNotFoundException e) {
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
         return view;
     }
 
     @PostMapping("/editUser/{id}")
-    public Object editUser(@PathVariable("id") long id,
-                           @ModelAttribute("userDTO") @Valid UserDTO user,
-                           BindingResult result,
-                           HttpServletResponse response) throws IOException {
-
+    public String editUser(@PathVariable("id") long id,
+                           @ModelAttribute("user") @Valid UserDTO userDTO,
+                           BindingResult result) {
         if (result.hasErrors()) {
             return "admin/editUser";
         }
 
-        User userEntity = userMapper.toEntity(user);
-        userEntity.setId(id);
-
-        userService.save(userEntity);
-        response.sendRedirect("/admin/userList");
-        return null;
+        User user = userMapper.toEntity(userDTO);
+        user.setId(id);
+        userService.save(user);
+        return "redirect:/registeredUsers";
     }
 }
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Выбор роли</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css}"/>
+</head>
+<body>
+    <div class="header-container flex flex-wrap flex-col items-center justify-between mx-auto">
+        <div class="flex items-center mb-2">
+            <img th:src="@{/images/logo_header.jpg}" class="h-6 mr-3" alt=""/>
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">
+                Авторизация
+            </h1>
+        </div>
+    </div>
+    <div class="max-w-sm mx-auto">
+        <div class="params-form">
+            <p class="block mb-2 text-center font-medium text-gray-900 dark:text-white">
+                Продолжить как:
+            </p>
+            <ul>
+                <li th:if="${user.roles.contains(roleAdmin)}">
+                    <a th:href="@{/registeredUsers}" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                       Администратор
+                    </a>
+                </li>
+                <li th:if="${user.roles.contains(roleDriver)}">
+                    <a th:href="@{/myTrips}" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                        Водитель
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/myRequests}" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                        Пассажир
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
+</html>

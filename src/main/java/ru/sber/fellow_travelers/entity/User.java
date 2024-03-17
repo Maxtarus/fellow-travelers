@@ -1,14 +1,11 @@
 package ru.sber.fellow_travelers.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.sber.fellow_travelers.entity.car.Car;
 import ru.sber.fellow_travelers.entity.enums.RoleType;
-import ru.sber.fellow_travelers.util.LocalDateUtils;
+import ru.sber.fellow_travelers.util.DateTimeUtils;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -38,14 +35,14 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
+    private List<Trip> trips = new ArrayList<>();
     @OneToMany(mappedBy = "toUser")
     private List<Feedback> toUsersFeedbacks = new ArrayList<>();
     @OneToMany(mappedBy = "fromUser")
     private List<Feedback> fromUsersFeedbacks = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger")
     private List<Request> requests = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
-    private List<Trip> trips = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
     private List<Car> cars = new ArrayList<>();
 
@@ -117,8 +114,12 @@ public class User implements UserDetails {
         return phoneNumber;
     }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
+    public String getBirthDate() {
+        return String.valueOf(birthDate);
+    }
+
+    public List<Request> getRequests() {
+        return requests;
     }
 
     public Set<Role> getRoles() {
@@ -164,6 +165,6 @@ public class User implements UserDetails {
     }
 
     public void setBirthDate(String birthDate) {
-        this.birthDate = LocalDateUtils.convertToISO(birthDate);
+        this.birthDate = DateTimeUtils.toISO(birthDate);
     }
 }

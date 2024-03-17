@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Добавление пользователя</title>
@@ -7,7 +7,7 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body th:style="'background-image: url(/images/road.jpg)'">
-    <form class="max-w-sm mx-auto" id="registerForm" th:object="${registerUser}" th:method="POST" th:action="@{/admin/addUser}">
+    <form class="max-w-sm mx-auto" id="registerForm" th:object="${user}" method="POST" th:action="@{/addUser}">
         <div class="params-form">
             <h1 class="mb-10 text-xl font-semibold leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">
                 Заполните информацию о новом о пользователе
@@ -49,7 +49,7 @@
                 <label for="birthdate-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Дата рождения
                 </label>
-                <input th:field="*{birthDate}" type="text" id="birthdate-input" placeholder="дд.мм.гггг"
+                <input th:field="*{birthDate}" type="date" id="birthdate-input" placeholder="дд.мм.гггг"
                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                 <p style="color: red"
                    th:if="${#fields.hasErrors('birthDate')}"
@@ -77,6 +77,14 @@
                    th:if="${#fields.hasErrors('password')}"
                    th:errors="*{password}">
                 </p>
+            </div>
+            <div class="flex items-center mb-4">
+                <input th:field="*{driver}" id="is-driver-input" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="is-driver-input" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Водитель</label>
+            </div>
+            <div class="flex items-center mb-4">
+                <input th:field="*{admin}" id="is-passenger-input" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="is-passenger-input" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Администратор</label>
             </div>
             <button type="submit" class="add-button">
                 Добавить
