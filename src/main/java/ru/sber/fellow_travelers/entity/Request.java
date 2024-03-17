@@ -3,6 +3,8 @@ package ru.sber.fellow_travelers.entity;
 import jakarta.persistence.*;
 import ru.sber.fellow_travelers.entity.enums.RequestStatus;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "requests")
 public class Request {
@@ -22,7 +24,8 @@ public class Request {
 
     public Request() { }
 
-    public Request(User passenger, Trip trip) {
+    public Request(RequestStatus status, User passenger, Trip trip) {
+        this.status = status;
         this.passenger = passenger;
         this.trip = trip;
     }
@@ -58,4 +61,19 @@ public class Request {
     public void setTrip(Trip trip) {
         this.trip = trip;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Request request = (Request) o;
+        return Objects.equals(id, request.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+
 }

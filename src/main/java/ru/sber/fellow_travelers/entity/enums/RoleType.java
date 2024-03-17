@@ -5,7 +5,7 @@ public enum RoleType {
     PASSENGER("Пассажир"),
     DRIVER("Водитель");
 
-    private String title;
+    private final String title;
 
     RoleType(String title) {
         this.title = title;
