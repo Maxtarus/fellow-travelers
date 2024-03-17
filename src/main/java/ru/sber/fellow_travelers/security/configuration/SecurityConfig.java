@@ -1,4 +1,4 @@
-package ru.sber.fellow_travelers.configuration;
+package ru.sber.fellow_travelers.security.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,16 +17,17 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import ru.sber.fellow_travelers.security.filter.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
     private final UserDetailsService userDetailsService;
-    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtFilter jwtFilter;
 
-    public SecurityConfig(UserDetailsService userDetailsService, JwtAuthFilter jwtAuthFilter) {
+    public SecurityConfig(UserDetailsService userDetailsService, JwtFilter jwtFilter) {
         this.userDetailsService = userDetailsService;
-        this.jwtAuthFilter = jwtAuthFilter;
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
@@ -57,17 +58,18 @@ public class SecurityConfig {
         http
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(mvc.pattern("/")).permitAll()
                         .requestMatchers(mvc.pattern("/signIn")).permitAll()
                         .requestMatchers(mvc.pattern("/signUp")).permitAll()
-                        .requestMatchers(mvc.pattern("/")).permitAll()
+                        .requestMatchers(mvc.pattern("/css/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/images/**")).permitAll()
                         .requestMatchers(mvc.pattern("/webjars/bootstrap/**")).permitAll()
-                        .requestMatchers(mvc.pattern("/admin/**")).authenticated()
                         .anyRequest().authenticated())
                 .formLogin(configurer -> configurer.loginPage("/"))
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout -> logout
                         .logoutSuccessUrl("/signIn")
                         .deleteCookies("jwt"));

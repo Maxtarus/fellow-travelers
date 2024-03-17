@@ -1,4 +1,4 @@
-package ru.sber.fellow_travelers.configuration;
+package ru.sber.fellow_travelers.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,17 +12,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.sber.fellow_travelers.service.JwtService;
+import ru.sber.fellow_travelers.security.service.JwtProvider;
 
 import java.io.IOException;
 
 @Component
-public class JwtAuthFilter extends OncePerRequestFilter {
-    private final JwtService jwtService;
+public class JwtFilter extends OncePerRequestFilter {
+    private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthFilter(JwtService jwtService, UserDetailsService userDetailsService) {
-        this.jwtService = jwtService;
+    public JwtFilter(JwtProvider jwtProvider, UserDetailsService userDetailsService) {
+        this.jwtProvider = jwtProvider;
         this.userDetailsService = userDetailsService;
     }
 
@@ -32,11 +32,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        String jwt = jwtService.getJwtFromHeader(request);
+        String jwt = jwtProvider.getJwtFromHeader(request);
         if (jwt != null && !jwt.isEmpty()) {
-            String userEmail = jwtService.getEmailFromJwtToken(jwt);
+            String userEmail = jwtProvider.getEmailFromJwtToken(jwt);
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-            if (jwtService.validateJwtToken(jwt)) {
+            if (jwtProvider.validateJwtToken(jwt)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,

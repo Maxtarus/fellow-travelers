@@ -12,19 +12,20 @@
         <div class="header-container flex flex-wrap flex-col items-center justify-between mx-auto">
             <a class="flex items-center mb-2">
                 <img th:src="@{/images/logo_header.jpg}" class="h-6 mr-3" alt=""/>
-                <h1 class="text-4xl font-extrabold tracking-tight text-gray-900" >Информационная система "Попутчики"</h1>
+                <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">
+                    Информационная система "Попутчики"
+                </h1>
             </a>
             <ul class="flex item-center space-x-1 p-1 mt-4 border border-gray-100 rounded-lg bg-gray-50">
                 <li>
-                    <a th:href="@{/admin/addUser}"
-                       class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                    <a th:href="@{/addUser}" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
                         Добавить пользователя
                     </a>
                 </li>
                 <li>
-                    <a th:href="@{/logout}"
-                       class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700"
-                       aria-current="page">Выйти из системы</a>
+                    <a th:href="@{/logout}" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700" aria-current="page">
+                        Выйти из системы
+                    </a>
                 </li>
             </ul>
         </div>
@@ -63,7 +64,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user: ${users}" th:if="${not user.isAdmin()}" th:with="count = ${counter.get()}"
+            <tr th:each="user: ${users}"  th:with="count = ${counter.get()}"
                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     th:text="${counter.incrementAndGet()}">
@@ -79,13 +80,13 @@
                     </div>
                 </td>
                 <td class="px-6 py-4" >
-                    <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
+                    <button th:if="${!user.id.equals(me.id)}"  data-modal-target="popup-modal" data-modal-toggle="popup-modal"
                         class="text-gray-700 hover:text-gray-900">
-                            <span class="material-symbols-outlined">delete</span>
+                            <span title="Удалить" class="material-symbols-outlined">delete</span>
                     </button>
-                    <form th:method="GET" th:action="@{'/admin/editUser/' + ${user.id}}">
+                    <form th:method="GET" th:action="@{'/editUser/' + ${user.id}}">
                         <button class="text-gray-700 hover:text-gray-900" name="submit">
-                            <span class="material-symbols-outlined">edit</span>
+                            <span title="Редактировать" class="material-symbols-outlined">edit</span>
                         </button>
                     </form>
                     <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
@@ -97,7 +98,7 @@
                                     </svg>
                                     <span class="sr-only">Close modal</span>
                                 </button>
-                                <form th:method="POST" th:action="@{'/admin/deleteUser/' + ${user.id}}">
+                                <form th:method="POST" th:action="@{'/deleteUser/' + ${user.id}}">
                                     <div class="p-4 md:p-5 text-center">
                                         <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
@@ -119,7 +120,6 @@
             </tbody>
         </table>
     </div>
-    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 </html>

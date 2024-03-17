@@ -1,7 +1,5 @@
-package ru.sber.fellow_travelers.controller;
+package ru.sber.fellow_travelers.security.controller;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -12,19 +10,28 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ru.sber.fellow_travelers.dto.UserDTO;
+import ru.sber.fellow_travelers.entity.Role;
 import ru.sber.fellow_travelers.entity.User;
-import ru.sber.fellow_travelers.service.AuthService;
+import ru.sber.fellow_travelers.entity.enums.RoleType;
+import ru.sber.fellow_travelers.repository.RoleRepository;
+import ru.sber.fellow_travelers.security.service.AuthService;
+import ru.sber.fellow_travelers.security.service.JwtProvider;
+import ru.sber.fellow_travelers.service.RoleService;
+import ru.sber.fellow_travelers.service.impl.RoleServiceImpl;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.List;
 
 @Controller
 public class AuthController {
     private final AuthService authService;
+    private final JwtProvider jwtProvider;
+    private final RoleService roleService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtProvider jwtProvider, RoleServiceImpl roleService) {
         this.authService = authService;
+        this.jwtProvider = jwtProvider;
+        this.roleService = roleService;
     }
 
     @GetMapping("/")
@@ -37,6 +44,7 @@ public class AuthController {
     @PostMapping("/signIn")
     public Object signIn(
             @ModelAttribute @Valid User userInfo,
+//            @ModelAttribute Role roleAdmin, @ModelAttribute Role roleDriver, @ModelAttribute Role rolePassenger,
             BindingResult result,
             HttpServletResponse response,
             HttpSession session
@@ -52,12 +60,39 @@ public class AuthController {
         }
 
         session.setAttribute("user", user);
-        response.addCookie(authService.getAuthorizeCookie(user));
+        response.addCookie(jwtProvider.getAuthorizeCookie(user));
+
+//        if (user.isAdmin()) {
+//            response.sendRedirect("/admin/userList");
+//        } else if (user.isDriver()) {
+//            response.sendRedirect("/driver");
+//        } else {
+//            response.sendRedirect("/passenger");
+//        }
+
+        ModelAndView view = new ModelAndView("chooseRole");
+        Role roleAdmin = roleService.findByType(RoleType.ADMIN);
+        Role roleDriver = roleService.findByType(RoleType.DRIVER);
+        Role rolePassenger = roleService.findByType(RoleType.PASSENGER);
+
+        view.addObject("roleAdmin", roleAdmin);
+        view.addObject("roleDriver", roleDriver);
+        view.addObject("rolePassenger", rolePassenger);
+
+        if (user.isDriver() || user.isAdmin()) {
+            view.addObject("user", user);
+        }
+
+        if (user.isDriver()) {
+            view.addObject("roleDriver", roleDriver);
+        }
 
         if (user.isAdmin()) {
-            response.sendRedirect("/admin/userList");
-        } else if (user.isDriver()) {
-            response.sendRedirect("/driver");
+            view.addObject("roleAdmin", roleAdmin);
+        }
+
+        if (user.isDriver() || user.isAdmin()) {
+            return view;
         } else {
             response.sendRedirect("/passenger");
         }
@@ -86,25 +121,8 @@ public class AuthController {
         User user = authService.signUp(registerUser);
         session.setAttribute("user", user);
 
-        response.addCookie(authService.getAuthorizeCookie(user));
+        response.addCookie(jwtProvider.getAuthorizeCookie(user));
         response.sendRedirect("/");
         return null;
-    }
-
-    @GetMapping("/logout")
-    public void logout(
-            HttpServletResponse response,
-            HttpServletRequest request,
-            HttpSession session
-    ) throws IOException {
-        Optional<Cookie> cookieOptional = Arrays.stream(request.getCookies())
-                .filter(c -> authService.getJwtHeaderName().equals(c.getName()))
-                .findAny();
-        if (cookieOptional.isPresent()) {
-            Cookie cookie = authService.getCookie(authService.getJwtHeaderName(), null, 0);
-            response.addCookie(cookie);
-            session.invalidate();
-            response.sendRedirect("/");
-        }
     }
 }

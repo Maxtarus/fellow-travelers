@@ -1,6 +1,5 @@
-package ru.sber.fellow_travelers.service;
+package ru.sber.fellow_travelers.security.service;
 
-import jakarta.servlet.http.Cookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,19 +18,15 @@ import java.util.Optional;
 public class AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final JwtService jwtService;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
 
     public AuthService(
             UserRepository userRepository, RoleRepository roleRepository,
-            JwtService jwtService, AuthenticationManager authenticationManager,
+            AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder
     ) {
         this.roleRepository = roleRepository;
-        this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -72,23 +67,5 @@ public class AuthService {
         }
 
         return null;
-    }
-
-    public Cookie getAuthorizeCookie(User user) {
-        String jwtToken = jwtService.generateTokenFromEmail(user.getUsername());
-        return getCookie(jwtService.getHeaderName(), jwtToken, Math.toIntExact(jwtService.getExpiration() / 1000));
-    }
-
-    public Cookie getCookie(String name, String value, int expiry) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setMaxAge(expiry);
-        return cookie;
-    }
-
-    public String getJwtHeaderName() {
-        return jwtService.getHeaderName();
     }
 }
