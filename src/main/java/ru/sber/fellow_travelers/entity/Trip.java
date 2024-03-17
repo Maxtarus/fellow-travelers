@@ -2,6 +2,8 @@ package ru.sber.fellow_travelers.entity;
 
 import jakarta.persistence.*;
 import ru.sber.fellow_travelers.entity.enums.TripStatus;
+import ru.sber.fellow_travelers.util.DateTimeUtils;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -120,5 +122,9 @@ public class Trip {
 
     public void setDriver(User driver) {
         this.driver = driver;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
     }
 }

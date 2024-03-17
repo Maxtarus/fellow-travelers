@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница пассажира</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"/>
+</head>
+<body>
+<nav class="bg-white border-gray-200 px-2 py-2.5 rounded" style="position: fixed; top: 0; width: 100%">
+    <div class="header-container flex flex-wrap flex-col items-center justify-between mx-auto">
+        <a class="flex items-center mb-2">
+            <img th:src="@{/images/logo_header.jpg}" class="h-6 mr-3" alt=""/>
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">Информационная система "Попутчики"</h1>
+        </a>
+        <ul class="flex item-center space-x-1 p-1 mt-4 border border-gray-100 rounded-lg bg-gray-50">
+            <li>
+                <a th:href="@{/availableTrips}"
+                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                    Доступные поездки
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/myRequests}"
+                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                    Мои заявки
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/logout}"
+                   class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700"
+                   aria-current="page">Выйти из системы</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="overflow-x-auto shadow-md sm:rounded-lg" style="margin-top: 230px">
+    <table class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <caption class="p-5 text-lg font-semibold text-center rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+            Доступные поездки
+        </caption>
+        <thead class="text-l text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+            <th scope="col" class="px-6 py-3">
+                №
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Начальная точка
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Конечная точка
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Дата отправления
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Время отправления
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Дата прибытия
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Время прибытия
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Цена, руб
+            </th>
+            <th scope="col" class="px-6 py-3">
+                Забронировать место
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="trip: ${trips}" th:with="count = ${counter.get()}"
+            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                th:text="${counter.incrementAndGet()}">
+            </th>
+            <td class="px-6 py-4" th:text="${trip.startPoint}"></td>
+            <td class="px-6 py-4" th:text="${trip.finalPoint}"></td>
+            <td class="px-6 py-4" th:text="${trip.departureDate}"></td>
+            <td class="px-6 py-4" th:text="${trip.departureTime}"></td>
+            <td class="px-6 py-4" th:text="${trip.arrivalDate}"></td>
+            <td class="px-6 py-4" th:text="${trip.arrivalTime}"></td>
+            <td class="px-6 py-4" th:text="${trip.price}"></td>
+            <td class="px-6 py-4">
+                <form th:method="POST" th:action="@{'/bookPlace/' + ${trip.id}}">
+                    <button class="text-gray-700 hover:text-gray-900">
+                        <span title="Забронировать" class="material-symbols-outlined">check</span>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
+</html>

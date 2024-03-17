@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание поездки</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body th:style="'background-image: url(/images/road.jpg)'">
+<form class="max-w-sm mx-auto" id="createTripForm" th:object="${trip}" method="POST" th:action="@{/createTrip}">
+    <div class="params-form">
+        <h1 class="mb-10 text-xl text-center font-semibold leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">
+            Заполните информацию о поездке
+        </h1>
+        <div class="mb-6">
+            <label for="start-point-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Начальная точка
+            </label>
+            <input th:field="*{startPoint}" type="text" id="start-point-input"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <p style="color: red"
+               th:if="${#fields.hasErrors('startPoint')}"
+               th:errors="*{startPoint}">
+            </p>
+        </div>
+        <div class="mb-6">
+            <label for="final-point-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Конечная точка
+            </label>
+            <input th:field="*{finalPoint}" type="text" id="final-point-input"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <p style="color: red"
+               th:if="${#fields.hasErrors('finalPoint')}"
+               th:errors="*{finalPoint}">
+            </p>
+        </div>
+        <div class="mb-6">
+            <label for="departure-date-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Дата отправления
+            </label>
+            <input th:field="*{departureDate}" type="date" id="departure-date-input"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <p style="color: red"
+               th:if="${#fields.hasErrors('departureDate')}"
+               th:errors="*{departureDate}">
+            </p>
+        </div>
+        <div class="mb-6">
+            <label for="departure-time-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Время отправления
+            </label>
+            <input th:field="*{departureTime}" type="time" id="departure-time-input"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <p style="color: red"
+               th:if="${#fields.hasErrors('departureTime')}"
+               th:errors="*{departureTime}">
+            </p>
+        </div>
+        <div class="mb-6">
+            <label for="arrival-date-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Дата прибытия
+            </label>
+            <input th:field="*{arrivalDate}" type="date" id="arrival-date-input"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <p style="color: red"
+               th:if="${#fields.hasErrors('arrivalDate')}"
+               th:errors="*{arrivalDate}">
+            </p>
+        </div>
+        <div class="mb-6">
+            <label for="arrival-time-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Время прибытия
+            </label>
+            <input th:field="*{arrivalTime}" type="time" id="arrival-time-input"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <p style="color: red"
+               th:if="${#fields.hasErrors('arrivalTime')}"
+               th:errors="*{arrivalTime}">
+            </p>
+        </div>
+        <div class="mb-6">
+            <label for="free-seats-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Свободных мест
+            </label>
+            <input th:field="*{freeSeats}" type="number" min="1" max="10" id="free-seats-input"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <p style="color: red"
+               th:if="${#fields.hasErrors('freeSeats')}"
+               th:errors="*{freeSeats}">
+            </p>
+        </div>
+        <div class="mb-6">
+            <label for="price-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Цена поездки
+            </label>
+            <input th:field="*{price}" type="number" min="0" step="100" id="price-input"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
+            <p style="color: red"
+               th:if="${#fields.hasErrors('price')}"
+               th:errors="*{price}">
+            </p>
+        </div>
+        <button type="submit" class="add-button">
+            Добавить
+        </button>
+    </div>
+</form>
+</body>
+</html>
