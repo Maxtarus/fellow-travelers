@@ -1,6 +1,16 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
 body {
     background-size: 120%;
     background-repeat: no-repeat;
+}
+
+.th {
+    text-align: center;
+}
+
+td {
+    text-align: center;
 }
 
 .header-container {
@@ -44,4 +54,9 @@ body {
     margin: auto auto 20px auto;
     left: 50%;
     transform: translate(-50%, 0);
+}
+
+.stars i{
+    font-size: 18px;
+    color: #28a745;
 }

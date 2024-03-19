@@ -2,15 +2,11 @@ package ru.sber.fellow_travelers.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.format.annotation.DateTimeFormat;
+import ru.sber.fellow_travelers.entity.Mark;
 import ru.sber.fellow_travelers.entity.enums.TripStatus;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class TripDTO {
     private long id;
@@ -33,6 +29,8 @@ public class TripDTO {
     private int freeSeats;
     private int price;
     private TripStatus status;
+    private UserDTO driver;
+    private List<Mark> marks = new ArrayList<>();
 
     public TripDTO() { }
 
@@ -114,5 +112,21 @@ public class TripDTO {
 
     public void setStatus(TripStatus status) {
         this.status = status;
+    }
+
+    public UserDTO getDriver() {
+        return driver;
+    }
+
+    public void setDriver(UserDTO driver) {
+        this.driver = driver;
+    }
+
+    public List<Mark> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(List<Mark> marks) {
+        this.marks = marks;
     }
 }

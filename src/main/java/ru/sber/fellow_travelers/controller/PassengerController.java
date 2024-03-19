@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PassengerController {
     @GetMapping
     public String showPassengerProfile() {
-        return "passenger/passengerProfile";
+        return "activeRequests";
     }
 
 }

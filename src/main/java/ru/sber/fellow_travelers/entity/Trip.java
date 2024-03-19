@@ -7,6 +7,7 @@ import ru.sber.fellow_travelers.util.DateTimeUtils;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "trips")
@@ -35,6 +36,8 @@ public class Trip {
     private User driver;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trip")
     private List<Request> requests = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trip")
+    private List<Mark> marks = new ArrayList<>();
 
     public Trip() { }
 
@@ -126,5 +129,26 @@ public class Trip {
 
     public List<Request> getRequests() {
         return requests;
+    }
+
+    public List<Mark> getMarks() {
+        return marks;
+    }
+
+    public void setMarks(List<Mark> marks) {
+        this.marks = marks;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Trip trip = (Trip) o;
+        return Objects.equals(id, trip.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

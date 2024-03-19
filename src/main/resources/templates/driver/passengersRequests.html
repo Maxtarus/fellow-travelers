@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Главная страница пассажира</title>
+    <title>Главная страница водителя</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"/>
@@ -16,15 +16,27 @@
         </a>
         <ul class="flex item-center space-x-1 p-1 mt-4 border border-gray-100 rounded-lg bg-gray-50">
             <li>
-                <a th:href="@{/availableTrips}"
+                <a th:href="@{/createTrip}"
                    class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
-                    Доступные поездки
+                    Создать поездку
                 </a>
             </li>
             <li>
-                <a th:href="@{/myRequests}"
+                <a th:href="@{/createdTrips}"
                    class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
-                    Мои заявки
+                    Созданные поездки
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/passengersRequests}"
+                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                    Заявки пассажиров
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/driverTripsHistory}"
+                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                    История поездок
                 </a>
             </li>
             <li>
@@ -38,7 +50,7 @@
 <div class="overflow-x-auto shadow-md sm:rounded-lg" style="margin-top: 230px">
     <table class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption class="p-5 text-lg font-semibold text-center rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-            Мои заявки
+            Заявки пассажиров
         </caption>
         <thead class="text-l text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
@@ -64,13 +76,10 @@
                 Время прибытия
             </th>
             <th scope="col" class="px-6 py-3">
-                Цена, руб
+               Пассажир
             </th>
             <th scope="col" class="px-6 py-3">
-                Статус заявки
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Удалить
+                Действие
             </th>
         </tr>
         </thead>
@@ -86,12 +95,15 @@
             <td class="px-6 py-4" th:text="${entry.value.departureTime}"></td>
             <td class="px-6 py-4" th:text="${entry.value.arrivalDate}"></td>
             <td class="px-6 py-4" th:text="${entry.value.arrivalTime}"></td>
-            <td class="px-6 py-4" th:text="${entry.value.price}"></td>
-            <td class="px-6 py-4" th:text="${entry.key.status.title}"></td>
-            <td class="px-6 py-4" >
-                <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
-                        class="text-gray-700 hover:text-gray-900">
-                    <span title="Удалить" class="material-symbols-outlined">delete</span>
+            <td class="px-6 py-4" th:text="${entry.key.passenger.lastName} + ' ' + ${entry.key.passenger.firstName}"></td>
+            <td class="px-6 py-4">
+                <form th:method="POST" th:action="@{'/approveRequest/' + ${entry.key.id}}">
+                    <button class="text-gray-700 hover:text-gray-900">
+                        <span title="Принять" class="material-symbols-outlined">check</span>
+                    </button>
+                </form>
+                <button class="text-gray-700 hover:text-gray-900" data-modal-target="popup-modal" data-modal-toggle="popup-modal">
+                    <span title="Отклонить" class="material-symbols-outlined">close</span>
                 </button>
                 <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
                     <div class="relative p-4 w-full max-w-md max-h-full">
@@ -102,14 +114,14 @@
                                 </svg>
                                 <span class="sr-only">Close modal</span>
                             </button>
-                            <form th:method="POST" th:action="@{'/deleteRequest/' + ${entry.key.id}}">
+                            <form th:method="POST" th:action="@{'/disapproveRequest/' + ${entry.key.id}}">
                                 <div class="p-4 md:p-5 text-center">
                                     <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                     </svg>
-                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Вы уверены, что хотите удалить данную заявку?</h3>
+                                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Вы уверены, что хотите отклонить данную заявку?</h3>
                                     <button type="submit" data-modal-hide="popup-modal" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                                        Удалить
+                                        Отклонить
                                     </button>
                                     <button data-modal-hide="popup-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                                         Отмена

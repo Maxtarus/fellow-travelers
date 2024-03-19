@@ -30,6 +30,13 @@ public class Request {
         this.trip = trip;
     }
 
+    public Request(Long id, RequestStatus status, User passenger, Trip trip) {
+        this.id = id;
+        this.status = status;
+        this.passenger = passenger;
+        this.trip = trip;
+    }
+
     public Long getId() {
         return id;
     }
@@ -74,6 +81,4 @@ public class Request {
     public int hashCode() {
         return Objects.hash(id);
     }
-
-
 }

@@ -17,7 +17,6 @@ import ru.sber.fellow_travelers.service.impl.UserServiceImpl;
 import ru.sber.fellow_travelers.thymeleaf.Counter;
 
 @Controller
-//@RequestMapping("/admin")
 public class UserController {
     private static final Logger LOGGER = LogManager.getLogger(UserController.class);
     private final UserService userService;
@@ -29,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping("/registeredUsers")
-    public ModelAndView showAdminProfilePage() {
-        ModelAndView view = new ModelAndView("admin/adminProfile");
+    public ModelAndView showRegisteredUsers() {
+        ModelAndView view = new ModelAndView("admin/registeredUsers");
         view.addObject("me", AuthUtils.getUserFromContext());
         view.addObject("users", userService.findAll());
         view.addObject("counter", new Counter());

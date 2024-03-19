@@ -94,7 +94,7 @@ public class AuthController {
         if (user.isDriver() || user.isAdmin()) {
             return view;
         } else {
-            response.sendRedirect("/passenger");
+            response.sendRedirect("/myRequests");
         }
 
         return null;

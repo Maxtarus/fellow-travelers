@@ -3,7 +3,6 @@ package ru.sber.fellow_travelers.entity;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.sber.fellow_travelers.entity.car.Car;
 import ru.sber.fellow_travelers.entity.enums.RoleType;
 import ru.sber.fellow_travelers.util.DateTimeUtils;
 
@@ -38,13 +37,11 @@ public class User implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
     private List<Trip> trips = new ArrayList<>();
     @OneToMany(mappedBy = "toUser")
-    private List<Feedback> toUsersFeedbacks = new ArrayList<>();
+    private List<Mark> toUsersFeedbacks = new ArrayList<>();
     @OneToMany(mappedBy = "fromUser")
-    private List<Feedback> fromUsersFeedbacks = new ArrayList<>();
+    private List<Mark> fromUsersFeedbacks = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger")
     private List<Request> requests = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
-    private List<Car> cars = new ArrayList<>();
 
     public User() { }
 
@@ -166,5 +163,24 @@ public class User implements UserDetails {
 
     public void setBirthDate(String birthDate) {
         this.birthDate = DateTimeUtils.toISO(birthDate);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

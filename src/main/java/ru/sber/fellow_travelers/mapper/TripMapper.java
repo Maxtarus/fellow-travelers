@@ -6,13 +6,14 @@ import ru.sber.fellow_travelers.entity.Trip;
 import ru.sber.fellow_travelers.entity.enums.TripStatus;
 import ru.sber.fellow_travelers.util.DateTimeUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 @Component
 public class TripMapper {
+    private final UserMapper userMapper;
+
+    public TripMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     public Trip toEntity(TripDTO tripDTO) {
         Trip trip = new Trip();
         trip.setStartPoint(tripDTO.getStartPoint());
@@ -22,6 +23,7 @@ public class TripMapper {
         trip.setFreeSeats(tripDTO.getFreeSeats());
         trip.setPrice(tripDTO.getPrice());
         trip.setStatus(TripStatus.NOT_COMPLETED);
+        trip.setMarks(tripDTO.getMarks());
         return trip;
     }
 
@@ -37,6 +39,8 @@ public class TripMapper {
         tripDTO.setFreeSeats(trip.getFreeSeats());
         tripDTO.setPrice(trip.getPrice());
         tripDTO.setStatus(trip.getStatus());
+        tripDTO.setDriver(userMapper.toDTO(trip.getDriver()));
+        tripDTO.setMarks(trip.getMarks());
         return tripDTO;
     }
 }
