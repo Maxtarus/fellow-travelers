@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import ru.sber.fellow_travelers.entity.Mark;
 import ru.sber.fellow_travelers.entity.enums.TripStatus;
+import ru.sber.fellow_travelers.google_maps_api.response.Coordinates;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,8 @@ public class TripDTO {
     private int price;
     private TripStatus status;
     private UserDTO driver;
+    private Coordinates startPointCoordinates;
+    private Coordinates finalPointCoordinates;
     private List<Mark> marks = new ArrayList<>();
 
     public TripDTO() { }
@@ -128,5 +131,21 @@ public class TripDTO {
 
     public void setMarks(List<Mark> marks) {
         this.marks = marks;
+    }
+
+    public Coordinates getStartPointCoordinates() {
+        return startPointCoordinates;
+    }
+
+    public void setStartPointCoordinates(Coordinates startPointCoordinates) {
+        this.startPointCoordinates = startPointCoordinates;
+    }
+
+    public Coordinates getFinalPointCoordinates() {
+        return finalPointCoordinates;
+    }
+
+    public void setFinalPointCoordinates(Coordinates finalPointCoordinates) {
+        this.finalPointCoordinates = finalPointCoordinates;
     }
 }

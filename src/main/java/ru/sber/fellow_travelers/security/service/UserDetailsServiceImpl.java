@@ -1,4 +1,4 @@
-package ru.sber.fellow_travelers.service.impl;
+package ru.sber.fellow_travelers.security.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

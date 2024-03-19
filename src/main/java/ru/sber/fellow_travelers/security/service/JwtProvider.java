@@ -59,6 +59,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + jwt.getExpiration()))
                 .signWith(SignatureAlgorithm.HS512, jwt.getSecretKey())
                 .compact();
     }

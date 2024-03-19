@@ -14,19 +14,16 @@ import ru.sber.fellow_travelers.entity.Request;
 import ru.sber.fellow_travelers.entity.Trip;
 import ru.sber.fellow_travelers.entity.User;
 import ru.sber.fellow_travelers.exception.TripNotFoundException;
+import ru.sber.fellow_travelers.google_maps_api.GeoService;
 import ru.sber.fellow_travelers.mapper.TripMapper;
 import ru.sber.fellow_travelers.security.utils.AuthUtils;
-import ru.sber.fellow_travelers.service.MarkService;
 import ru.sber.fellow_travelers.service.RequestService;
 import ru.sber.fellow_travelers.service.TripService;
-import ru.sber.fellow_travelers.service.impl.MarkServiceImpl;
-import ru.sber.fellow_travelers.service.impl.RequestServiceImpl;
 import ru.sber.fellow_travelers.thymeleaf.Counter;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -34,15 +31,15 @@ public class TripController {
     private static final Logger LOGGER = LogManager.getLogger(TripController.class);
     private final TripService tripService;
     private final RequestService requestService;
-    private final MarkService markService;
+    private final GeoService geoService;
     private final TripMapper tripMapper;
 
     public TripController(TripService tripService,
-                          RequestServiceImpl requestService,
-                          MarkServiceImpl feedbackService, TripMapper tripMapper) {
+                          RequestService requestService,
+                          GeoService geoService, TripMapper tripMapper) {
         this.tripService = tripService;
         this.requestService = requestService;
-        this.markService = feedbackService;
+        this.geoService = geoService;
         this.tripMapper = tripMapper;
     }
 
@@ -91,6 +88,14 @@ public class TripController {
 
         for (Request request : approvedRequestsForCompletedTrips) {
             TripDTO tripDTO = tripMapper.toDTO(request.getTrip());
+
+            try {
+                tripDTO.setStartPointCoordinates(geoService.getGeocode(tripDTO.getStartPoint()));
+                tripDTO.setFinalPointCoordinates(geoService.getGeocode(tripDTO.getFinalPoint()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
             if (!request.getTrip().getMarks().isEmpty()) {
 
                 if (request.getTrip().getMarks()
@@ -99,18 +104,11 @@ public class TripController {
                     Mark mark = request.getTrip().getMarks().stream().filter(m -> m.getFromUser().equals(user)).findAny().get();
                     MarkTripDTO markTrip = new MarkTripDTO(tripDTO, mark);
                     markTripDTOs.add(markTrip);
-//                    view.addObject(markTrip);
                 } else {
-                    Mark mark = new Mark();
-                    MarkTripDTO markTrip = new MarkTripDTO(tripDTO, mark);
-                    markTripDTOs.add(markTrip);
-//                    view.addObject(markTrip);
+                    markTripDTOs.add(new MarkTripDTO(tripDTO, new Mark()));
                 }
             } else {
-                Mark mark = new Mark();
-                MarkTripDTO markTrip = new MarkTripDTO(tripDTO, mark);
-                markTripDTOs.add(markTrip);
-//                view.addObject(markTrip);
+                markTripDTOs.add(new MarkTripDTO(tripDTO, new Mark()));
             }
         }
 
@@ -120,6 +118,8 @@ public class TripController {
         view.addObject("counter", new Counter());
         return view;
     }
+
+
 
     @GetMapping("/availableTrips")
     public ModelAndView showPassengerProfile() {

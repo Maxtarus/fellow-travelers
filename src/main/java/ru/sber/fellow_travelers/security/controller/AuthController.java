@@ -13,14 +13,13 @@ import ru.sber.fellow_travelers.dto.UserDTO;
 import ru.sber.fellow_travelers.entity.Role;
 import ru.sber.fellow_travelers.entity.User;
 import ru.sber.fellow_travelers.entity.enums.RoleType;
-import ru.sber.fellow_travelers.repository.RoleRepository;
 import ru.sber.fellow_travelers.security.service.AuthService;
 import ru.sber.fellow_travelers.security.service.JwtProvider;
 import ru.sber.fellow_travelers.service.RoleService;
 import ru.sber.fellow_travelers.service.impl.RoleServiceImpl;
 
 import java.io.IOException;
-import java.util.List;
+
 
 @Controller
 public class AuthController {
@@ -44,7 +43,6 @@ public class AuthController {
     @PostMapping("/signIn")
     public Object signIn(
             @ModelAttribute @Valid User userInfo,
-//            @ModelAttribute Role roleAdmin, @ModelAttribute Role roleDriver, @ModelAttribute Role rolePassenger,
             BindingResult result,
             HttpServletResponse response,
             HttpSession session
@@ -61,14 +59,6 @@ public class AuthController {
 
         session.setAttribute("user", user);
         response.addCookie(jwtProvider.getAuthorizeCookie(user));
-
-//        if (user.isAdmin()) {
-//            response.sendRedirect("/admin/userList");
-//        } else if (user.isDriver()) {
-//            response.sendRedirect("/driver");
-//        } else {
-//            response.sendRedirect("/passenger");
-//        }
 
         ModelAndView view = new ModelAndView("chooseRole");
         Role roleAdmin = roleService.findByType(RoleType.ADMIN);
