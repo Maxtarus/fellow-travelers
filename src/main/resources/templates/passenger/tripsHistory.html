@@ -100,17 +100,17 @@
                             type: "GET",
                             url: "/map",
                             data: {
-                                startPointLongitude: /*[[${trip.finalPointCoordinates.longitude}]]*/ null,
-                                startPointLatitude: /*[[${trip.finalPointCoordinates.latitude}]]*/ null
+                                startPointLongitude: /*[[${markTrip.trip.finalPointCoordinates.longitude}]]*/ null,
+                                startPointLatitude: /*[[${markTrip.trip.finalPointCoordinates.latitude}]]*/ null
                             }
                         })
                     }
                 </script>
                 <a th:href="@{/showMap(
-                startPointLng=${trip.startPointCoordinates.longitude},
-                startPointLat=${trip.startPointCoordinates.latitude},
-                finalPointLng=${trip.finalPointCoordinates.longitude},
-                finalPointLat=${trip.finalPointCoordinates.latitude}
+                startPointLng=${markTrip.trip.startPointCoordinates.longitude},
+                startPointLat=${markTrip.trip.startPointCoordinates.latitude},
+                finalPointLng=${markTrip.trip.finalPointCoordinates.longitude},
+                finalPointLat=${markTrip.trip.finalPointCoordinates.latitude}
                 )}"
                    onclick="getMap()">
                     <span class="material-symbols-outlined">pin_drop</span>
