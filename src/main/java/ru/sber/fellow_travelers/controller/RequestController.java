@@ -95,7 +95,7 @@ public class RequestController {
             LOGGER.error(e.getMessage());
         }
 
-        return "redirect:/createdTrips";
+        return "redirect:/passengersRequests";
     }
 
     @PostMapping("/disapproveRequest/{id}")
@@ -107,7 +107,7 @@ public class RequestController {
             LOGGER.error(e.getMessage());
         }
 
-        return "redirect:/createdTrips";
+        return "redirect:/passengersRequests";
     }
 
     @PostMapping("deleteRequest/{id}")

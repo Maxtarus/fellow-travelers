@@ -26,6 +26,10 @@ public class Role implements GrantedAuthority {
         this.type = type;
     }
 
+    public Role(RoleType type) {
+        this.type = type;
+    }
+
     @Override
     public String getAuthority() {
         return "ROLE_" + type;

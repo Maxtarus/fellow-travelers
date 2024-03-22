@@ -7,9 +7,9 @@ import ru.sber.fellow_travelers.entity.User;
 public final class AuthUtils {
     private AuthUtils() { }
     public static User getUserFromContext() {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
-        return (User) user;
+        return (User) userDetails;
     }
 }

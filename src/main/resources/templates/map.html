@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Карта</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=038c822b-fe4f-4429-ae45-5e64f50803d0&"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        ymaps.ready(init);
+        function init() {
+            const map = new ymaps.Map('map',
+                {
+                    center: [55.733842, 37.588144],
+                    zoom: 8
+                });
+
+            const startPointLat = /*[[${startPointLat}]]*/ null;
+            const startPointLng = /*[[${startPointLng}]]*/ null;
+
+
+            const startPoint = new ymaps.Placemark([startPointLat, startPointLng],
+                {},
+                {
+                    preset: "twirl#greenIcon"
+                }
+            );
+
+            map.geoObjects.add(startPoint);
+
+            const finalPointLat = /*[[${finalPointLat}]]*/ null;
+            const finalPointLng = /*[[${finalPointLng}]]*/ null;
+
+
+            const finalPoint = new ymaps.Placemark([finalPointLat, finalPointLng],
+                {},
+                {
+                    preset: "twirl#greenIcon"
+                }
+            );
+
+            map.geoObjects.add(finalPoint);
+
+            const multiRoute = new ymaps.multiRouter.MultiRoute({
+                // Точки маршрута. Точки могут быть заданы как координатами, так и адресом.
+                referencePoints: [
+                    [startPointLat, startPointLng],
+                    [finalPointLat, finalPointLng]
+                ]
+            }, {
+                // Автоматически устанавливать границы карты так,
+                // чтобы маршрут был виден целиком.
+                boundsAutoApply: true
+            });
+
+            map.geoObjects.add(multiRoute);
+        }
+    </script>
+    <style> html, body, #map { width: 100%; height: 100%; margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; } .toolbar { position: absolute; z-index: 1000; top: 0; left: 0; display: flex; align-items: center; padding: 16px; } .toolbar a { padding: 16px; }  </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div id="map"></div>
+</body>
+</html>

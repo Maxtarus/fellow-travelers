@@ -60,31 +60,19 @@ public class AuthController {
         session.setAttribute("user", user);
         response.addCookie(jwtProvider.getAuthorizeCookie(user));
 
-        ModelAndView view = new ModelAndView("chooseRole");
-        Role roleAdmin = roleService.findByType(RoleType.ADMIN);
-        Role roleDriver = roleService.findByType(RoleType.DRIVER);
-        Role rolePassenger = roleService.findByType(RoleType.PASSENGER);
-
-        view.addObject("roleAdmin", roleAdmin);
-        view.addObject("roleDriver", roleDriver);
-        view.addObject("rolePassenger", rolePassenger);
-
-        if (user.isDriver() || user.isAdmin()) {
+        if (user.getRoles().size() > 1) {
+            ModelAndView view = new ModelAndView("chooseRole");
             view.addObject("user", user);
-        }
-
-        if (user.isDriver()) {
-            view.addObject("roleDriver", roleDriver);
-        }
-
-        if (user.isAdmin()) {
-            view.addObject("roleAdmin", roleAdmin);
-        }
-
-        if (user.isDriver() || user.isAdmin()) {
+            view.addObject("roleAdmin", roleService.findByType(RoleType.ADMIN));
+            view.addObject("roleDriver", roleService.findByType(RoleType.DRIVER));
+            view.addObject("rolePassenger", roleService.findByType(RoleType.PASSENGER));
             return view;
+        } else if (user.isAdmin()) {
+            response.sendRedirect("/registeredUsers");
+        } else if (user.isDriver()) {
+            response.sendRedirect("/createdTrips");
         } else {
-            response.sendRedirect("/myRequests");
+            response.sendRedirect("/activeRequests");
         }
 
         return null;

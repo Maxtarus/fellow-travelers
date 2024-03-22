@@ -23,9 +23,14 @@ public class UserDTO {
             message = "Дата рождения не соответствует формату \"дд.мм.гггг\"!")
     private String birthDate;
     private boolean isDriver;
-    private  boolean isAdmin;
+    private boolean isAdmin;
 
     public UserDTO() { }
+
+    public UserDTO(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     public String getEmail() {
         return email;

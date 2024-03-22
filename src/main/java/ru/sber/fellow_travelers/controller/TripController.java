@@ -51,7 +51,8 @@ public class TripController {
         List<Trip> trips = tripService.findAllNotCompletedByDriverId(user.getId());
         List<TripDTO> tripDTOs = new ArrayList<>();
         for (Trip trip : trips) {
-            tripDTOs.add(tripMapper.toDTO(trip));
+            TripDTO tripDTO = tripMapper.toDTO(trip);
+            tripDTOs.add(tripDTO);
         }
 
         view.addObject("user", user);
@@ -69,7 +70,16 @@ public class TripController {
         List<TripDTO> tripDTOs = new ArrayList<>();
 
         for (Trip trip : trips) {
-            tripDTOs.add(tripMapper.toDTO(trip));
+            TripDTO tripDTO = tripMapper.toDTO(trip);
+
+            try {
+                tripDTO.setStartPointCoordinates(geoService.getGeocode(tripDTO.getStartPoint()));
+                tripDTO.setFinalPointCoordinates(geoService.getGeocode(tripDTO.getFinalPoint()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            tripDTOs.add(tripDTO);
         }
 
         view.addObject("user", user);
@@ -118,8 +128,6 @@ public class TripController {
         view.addObject("counter", new Counter());
         return view;
     }
-
-
 
     @GetMapping("/availableTrips")
     public ModelAndView showPassengerProfile() {

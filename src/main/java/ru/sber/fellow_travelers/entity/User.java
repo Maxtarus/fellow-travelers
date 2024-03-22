@@ -31,8 +31,8 @@ public class User implements UserDetails {
     private LocalDate birthDate;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
     private List<Trip> trips = new ArrayList<>();
@@ -55,6 +55,12 @@ public class User implements UserDetails {
         this.phoneNumber = phoneNumber;
         this.birthDate = LocalDate.parse(birthDate);
         this.roles = roles;
+    }
+
+    public User(long id, String email, String password) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
     }
 
     @Override

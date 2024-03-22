@@ -26,12 +26,10 @@ public class MarkController {
     private static final Logger LOGGER = LogManager.getLogger(MarkController.class);
     private final TripService tripService;
     private final MarkService markService;
-    private final TripMapper tripMapper;
 
     public MarkController(TripService tripService, MarkService markService, TripMapper tripMapper) {
         this.tripService = tripService;
         this.markService = markService;
-        this.tripMapper = tripMapper;
     }
 
     @PostMapping("/passengerTripsHistory/rateDriver/{id}")

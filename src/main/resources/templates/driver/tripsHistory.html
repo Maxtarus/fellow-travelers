@@ -64,6 +64,9 @@
                 Конечная точка
             </th>
             <th scope="col" class="px-6 py-3">
+                Маршрут на карте
+            </th>
+            <th scope="col" class="px-6 py-3">
                 Дата отправления
             </th>
             <th scope="col" class="px-6 py-3">
@@ -91,6 +94,29 @@
             </th>
             <td class="px-6 py-4" th:text="${trip.startPoint}"></td>
             <td class="px-6 py-4" th:text="${trip.finalPoint}"></td>
+            <td class="px-6 py-4">
+                <script type="text/javascript">
+                    function getMap() {
+                        $.ajax({
+                            type: "GET",
+                            url: "/map",
+                            data: {
+                                startPointLongitude: /*[[${trip.finalPointCoordinates.longitude}]]*/ null,
+                                startPointLatitude: /*[[${trip.finalPointCoordinates.latitude}]]*/ null
+                            }
+                        })
+                    }
+                </script>
+                <a th:href="@{/showMap(
+                startPointLng=${trip.startPointCoordinates.longitude},
+                startPointLat=${trip.startPointCoordinates.latitude},
+                finalPointLng=${trip.finalPointCoordinates.longitude},
+                finalPointLat=${trip.finalPointCoordinates.latitude}
+                )}"
+                   onclick="getMap()">
+                    <span class="material-symbols-outlined">pin_drop</span>
+                </a>
+            </td>
             <td class="px-6 py-4" th:text="${trip.departureDate}"></td>
             <td class="px-6 py-4" th:text="${trip.departureTime}"></td>
             <td class="px-6 py-4" th:text="${trip.arrivalDate}"></td>

@@ -1,0 +1,16 @@
+version: "3.8"
+
+networks:
+  backend:
+
+services:
+  core:
+    container_name: application_container
+    image: application_image
+    build:
+      context: .
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
