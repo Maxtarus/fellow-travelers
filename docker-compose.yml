@@ -1,16 +1,29 @@
-version: "3.8"
-
-networks:
-  backend:
+version: '3.9'
 
 services:
-  core:
-    container_name: application_container
-    image: application_image
-    build:
-      context: .
+  db:
+    image: postgres:16.0
+    container_name: postgres
     restart: on-failure
     ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "fellow_travelers"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "111"
+    volumes:
+      - ./src/main/resources/data.sql:/docker-entrypoint-initdb.d/data.sql
+
+  web:
+    image: server_image
+    container_name: fellow-travelers
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
       - "8080:8080"
-    networks:
-      - backend
+    depends_on:
+      - db
+    environment:
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fellow_travelers
