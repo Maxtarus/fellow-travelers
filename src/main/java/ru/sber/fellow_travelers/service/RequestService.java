@@ -16,5 +16,6 @@ public interface RequestService {
     void createRequest(User user, Trip trip);
     void approveRequest(Request request);
     void disapproveRequest(Request request);
-    List<Request> findAllApprovedForCompletedTrips(User passenger);
+    List<Request> findAllApprovedForCompletedTripsByPassenger(User passenger);
+    List<Request> findAllApprovedForCompletedTripByTripId(long id);
 }

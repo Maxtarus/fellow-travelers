@@ -1,5 +1,8 @@
 version: '3.9'
 
+networks:
+  backend:
+
 services:
   db:
     image: postgres:16.0
@@ -12,7 +15,9 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "111"
     volumes:
-      - ./src/main/resources/data.sql:/docker-entrypoint-initdb.d/data.sql
+      - ./volumes/dbdata:/var/lib/postgresql/data
+    networks:
+      - backend
 
   web:
     image: server_image
@@ -27,3 +32,7 @@ services:
     environment:
       - SERVER_PORT=8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/fellow_travelers
+      - DB_USER=postgres
+      - DB_PASSWORD=111
+    networks:
+      - backend

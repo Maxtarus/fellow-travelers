@@ -54,34 +54,34 @@
         </caption>
         <thead class="text-l text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 №
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 Начальная точка
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 Конечная точка
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 Маршрут на карте
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 Дата отправления
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 Время отправления
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 Дата прибытия
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 Время прибытия
             </th>
-            <th scope="col" class="px-6 py-3">
-                Статус
+            <th style="text-align: center" scope="col" class="px-6 py-3">
+                Пассажиры
             </th>
-            <th scope="col" class="px-6 py-3">
+            <th style="text-align: center" scope="col" class="px-6 py-3">
                 Удалить
             </th>
         </tr>
@@ -114,14 +114,18 @@
                 finalPointLat=${trip.finalPointCoordinates.latitude}
                 )}"
                    onclick="getMap()">
-                    <span class="material-symbols-outlined">pin_drop</span>
+                    <span title="Посмотреть на карте" class="material-symbols-outlined">pin_drop</span>
                 </a>
             </td>
             <td class="px-6 py-4" th:text="${trip.departureDate}"></td>
             <td class="px-6 py-4" th:text="${trip.departureTime}"></td>
             <td class="px-6 py-4" th:text="${trip.arrivalDate}"></td>
             <td class="px-6 py-4" th:text="${trip.arrivalTime}"></td>
-            <td class="px-6 py-4" th:text="${trip.status.title}"></td>
+            <td class="px-6 py-4">
+                <a th:href="@{/driverTripsHistory/passengers(tripId=${trip.id})}">
+                    <span title="Посмотреть" class="material-symbols-outlined">visibility</span>
+                </a>
+            </td>
             <td class="px-6 py-4" >
                 <button data-modal-target="popup-modal" data-modal-toggle="popup-modal"
                         class="text-gray-700 hover:text-gray-900">

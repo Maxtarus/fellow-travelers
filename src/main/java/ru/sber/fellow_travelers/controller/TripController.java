@@ -7,15 +7,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import ru.sber.fellow_travelers.dto.DriverDTO;
 import ru.sber.fellow_travelers.dto.MarkTripDTO;
 import ru.sber.fellow_travelers.dto.TripDTO;
+import ru.sber.fellow_travelers.dto.UserDTO;
 import ru.sber.fellow_travelers.entity.Mark;
 import ru.sber.fellow_travelers.entity.Request;
 import ru.sber.fellow_travelers.entity.Trip;
 import ru.sber.fellow_travelers.entity.User;
+import ru.sber.fellow_travelers.entity.enums.MarkType;
 import ru.sber.fellow_travelers.exception.TripNotFoundException;
 import ru.sber.fellow_travelers.google_maps_api.GeoService;
+import ru.sber.fellow_travelers.mapper.DriverMapper;
 import ru.sber.fellow_travelers.mapper.TripMapper;
+import ru.sber.fellow_travelers.mapper.UserMapper;
 import ru.sber.fellow_travelers.security.utils.AuthUtils;
 import ru.sber.fellow_travelers.service.RequestService;
 import ru.sber.fellow_travelers.service.TripService;
@@ -23,7 +28,9 @@ import ru.sber.fellow_travelers.thymeleaf.Counter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -32,14 +39,18 @@ public class TripController {
     private final TripService tripService;
     private final RequestService requestService;
     private final GeoService geoService;
+    private final UserMapper userMapper;
+    private final DriverMapper driverMapper;
     private final TripMapper tripMapper;
 
     public TripController(TripService tripService,
                           RequestService requestService,
-                          GeoService geoService, TripMapper tripMapper) {
+                          GeoService geoService, UserMapper userMapper, DriverMapper driverMapper, TripMapper tripMapper) {
         this.tripService = tripService;
         this.requestService = requestService;
         this.geoService = geoService;
+        this.userMapper = userMapper;
+        this.driverMapper = driverMapper;
         this.tripMapper = tripMapper;
     }
 
@@ -88,12 +99,38 @@ public class TripController {
         return view;
     }
 
+    @GetMapping("/driverTripsHistory/passengers")
+    public ModelAndView showPassengersForTrip(@RequestParam("tripId") long id) {
+        ModelAndView view = new ModelAndView("driver/tripPassengers");
+        List<Request> allApprovedRequestsForTrip = requestService.findAllApprovedForCompletedTripByTripId(id);
+        Map<UserDTO, MarkType> marksByPassengers = new HashMap<>();
+
+        for (Request request : allApprovedRequestsForTrip) {
+            User passenger = request.getPassenger();
+            List<Mark> marksFromPassenger = passenger.getMarksFromUsers();
+
+            if (marksFromPassenger.isEmpty()) {
+                marksByPassengers.put(userMapper.toDTO(passenger), null);
+            }
+
+            for (Mark mark : marksFromPassenger) {
+                if (mark.getTrip().getId() == id) {
+                    marksByPassengers.put(userMapper.toDTO(passenger), mark.getMarkType());
+                }
+            }
+        }
+
+        view.addObject("marksByPassengers", marksByPassengers);
+        view.addObject("counter", new Counter());
+        return view;
+    }
+
     @GetMapping("/passengerTripsHistory")
     public ModelAndView showPassengerTripsHistory() {
         ModelAndView view = new ModelAndView("passenger/tripsHistory");
         User user = AuthUtils.getUserFromContext();
 
-        List<Request> approvedRequestsForCompletedTrips = requestService.findAllApprovedForCompletedTrips(user);
+        List<Request> approvedRequestsForCompletedTrips = requestService.findAllApprovedForCompletedTripsByPassenger(user);
         List<MarkTripDTO> markTripDTOs = new ArrayList<>();
 
         for (Request request : approvedRequestsForCompletedTrips) {
@@ -125,6 +162,23 @@ public class TripController {
         view.addObject("markTrip", new MarkTripDTO());
         view.addObject("markTripDTOs", markTripDTOs);
         view.addObject("user", user);
+        view.addObject("counter", new Counter());
+        return view;
+    }
+
+    @GetMapping("/driverInfo")
+    public ModelAndView showDriverInfo(@RequestParam("tripId") long id) {
+        ModelAndView view = new ModelAndView("passenger/driverInfo");
+
+        try {
+            Trip trip = tripService.findById(id);
+            User driver = trip.getDriver();
+            DriverDTO driverDTO = driverMapper.toDTO(driver);
+            view.addObject("driver", driverDTO);
+        } catch (TripNotFoundException e) {
+            LOGGER.error(e.getMessage());
+        }
+
         view.addObject("counter", new Counter());
         return view;
     }

@@ -39,18 +39,25 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
-    public List<Mark> findAllByPassenger(User passenger) {
-        return findAll()
-                .stream()
-                .filter(mark -> mark.getFromUser().equals(passenger))
+    public List<Mark> findAllForTripByTripId(long id) {
+        return findAll().stream()
+                .filter(mark -> mark.getTrip().getId() == id)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public Mark findByFromUserAndToUserAndTrip(User fromUser, User toUser, Trip trip) {
-        return markRepository.findByFromUserAndToUserAndTrip(fromUser, toUser, trip)
-                .orElseThrow(() -> new MarkNotFoundException("Mark not found"));
-    }
+//    @Override
+//    public List<Mark> findAllByPassenger(User passenger) {
+//        return findAll()
+//                .stream()
+//                .filter(mark -> mark.getFromUser().equals(passenger))
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public Mark findByFromUserAndToUserAndTrip(User fromUser, User toUser, Trip trip) {
+//        return markRepository.findByFromUserAndToUserAndTrip(fromUser, toUser, trip)
+//                .orElseThrow(() -> new MarkNotFoundException("Mark not found"));
+//    }
 
 //    @Override
 //    public Mark findByPassengerAndTrip(User passenger, Trip trip) {

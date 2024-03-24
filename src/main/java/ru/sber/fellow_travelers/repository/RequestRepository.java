@@ -19,7 +19,6 @@ public interface RequestRepository extends CrudRepository<Request, Long> {
             "FROM Request request " +
                 "JOIN request.passenger rp ON rp.id =:passengerId " +
                 "JOIN request.trip " +
-//                "JOIN request.trip.marks rtm ON request.trip.id = rtm.trip.id " +
             "WHERE request.trip.status = :tripStatus " +
                 "AND request.status = :requestStatus"
     )

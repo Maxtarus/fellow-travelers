@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/fellow_travelers
-    username: postgres
-    password: 111
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -10,6 +10,9 @@ spring:
   sql:
     init:
       mode: always
+
+server:
+  port: ${SERVER_PORT}
 
 app:
   jwt:

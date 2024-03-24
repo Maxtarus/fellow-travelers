@@ -2,7 +2,6 @@ package ru.sber.fellow_travelers;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.openMocks;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,17 +11,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.boot.test.context.SpringBootTest;
 import ru.sber.fellow_travelers.entity.User;
-import ru.sber.fellow_travelers.exception.UserNotFoundException;
 import ru.sber.fellow_travelers.repository.UserRepository;
-import ru.sber.fellow_travelers.service.UserService;
 import ru.sber.fellow_travelers.service.impl.UserServiceImpl;
 
 import java.util.Optional;
 
 
-//@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class UserServiceTests {
@@ -31,21 +26,12 @@ class UserServiceTests {
     @InjectMocks
     UserServiceImpl userServiceImpl;
 
-//    @Mock
-//    UserService userService;
     User user;
 
     @BeforeEach
     void setup() {
         user = new User(1L, "qqq", "111");
     }
-
-//    @Test
-//    public void givenUser_whenSave_thenReturnEmployeeObject() {
-//        when(userRepository.save(any(User.class))).thenReturn(user);
-//        userService.save(user);
-//        assertNotNull(userRepository.findById(10L));
-//    }
 
 
     @Test

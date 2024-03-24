@@ -113,15 +113,18 @@
                 finalPointLat=${markTrip.trip.finalPointCoordinates.latitude}
                 )}"
                    onclick="getMap()">
-                    <span class="material-symbols-outlined">pin_drop</span>
+                    <span title="Открыть карту" class="material-symbols-outlined">pin_drop</span>
                 </a>
             </td>
             <td class="px-6 py-4" th:text="${markTrip.trip.departureDate}"></td>
             <td class="px-6 py-4" th:text="${markTrip.trip.departureTime}"></td>
             <td class="px-6 py-4" th:text="${markTrip.trip.arrivalDate}"></td>
             <td class="px-6 py-4" th:text="${markTrip.trip.arrivalTime}"></td>
-            <td class="px-6 py-4"
-                th:text="${markTrip.trip.driver.lastName} + ' ' + ${markTrip.trip.driver.firstName}"></td>
+            <td class="px-6 py-4">
+                <a th:href="@{/driverInfo(tripId=${markTrip.trip.id})}">
+                    <span title="Посмотреть информацию о водителе" class="material-symbols-outlined">visibility</span>
+                </a>
+            </td>
             <td class="px-0 py-4" style="justify-content: center">
                 <form th:if="${markTrip.mark.trip == null}" th:method="POST" th:action="@{'/passengerTripsHistory/rateDriver/' + ${markTrip.trip.id}}">
                     <label>

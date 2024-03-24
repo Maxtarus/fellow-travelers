@@ -2,13 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Главная страница пассажира</title>
+    <title>Информация о водителе</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"/>
 </head>
 <body>
-<nav class="bg-white border-gray-200 px-2 py-2.5 rounded" style="position: fixed; top: 0; width: 100%">
+<nav class="bg-white border-gray-200 px-2 rounded" style="position: fixed; top: 0; width: 100%">
     <div class="header-container flex flex-wrap flex-col items-center justify-between mx-auto">
         <a class="flex items-center mb-2">
             <img th:src="@{/images/logo_header.jpg}" class="h-6 mr-3" alt=""/>
@@ -35,7 +35,7 @@
             </li>
             <li>
                 <a th:href="@{/logout}"
-                   class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700"
+                   class="block py-2 pl-3 pr-4 text-gray-700 bg-blue-700 rounded md:bg-transparent md:text-blue-700"
                    aria-current="page">Выйти из системы</a>
             </li>
         </ul>
@@ -44,67 +44,35 @@
 <div class="overflow-x-auto shadow-md sm:rounded-lg" style="margin-top: 230px">
     <table class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <caption class="p-5 text-lg font-semibold text-center rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
-            Доступные поездки
+            Информация о водителе
         </caption>
         <thead class="text-l text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
-            <th scope="col" class="px-6 py-3">
-                №
+            <th style="text-align: center" scope="col" class="px-6 py-3">
+                Фамилия
             </th>
-            <th scope="col" class="px-6 py-3">
-                Водитель
+            <th style="text-align: center" scope="col" class="px-6 py-3">
+                Имя
             </th>
-            <th scope="col" class="px-6 py-3">
-                Начальная точка
+            <th style="text-align: center" scope="col" class="px-6 py-3">
+                Дата рождения
             </th>
-            <th scope="col" class="px-6 py-3">
-                Конечная точка
+            <th style="text-align: center" scope="col" class="px-6 py-3">
+                Рейтинг
             </th>
-            <th scope="col" class="px-6 py-3">
-                Дата отправления
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Время отправления
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Дата прибытия
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Время прибытия
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Цена, руб
-            </th>
-            <th scope="col" class="px-6 py-3">
-                Забронировать место
+            <th style="text-align: center" scope="col" class="px-6 py-3">
+                Количество завершённых поездок
             </th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="trip: ${trips}" th:with="count = ${counter.get()}"
+        <tr th:object="${driver}"
             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                th:text="${counter.incrementAndGet()}">
-            </th>
-            <td class="px-6 py-4">
-                <a th:href="@{/driverInfo(tripId=${trip.id})}">
-                    <span title="Посмотреть информацию о водителе" class="material-symbols-outlined">visibility</span>
-                </a>
-            </td>
-            <td class="px-6 py-4" th:text="${trip.startPoint}"></td>
-            <td class="px-6 py-4" th:text="${trip.finalPoint}"></td>
-            <td class="px-6 py-4" th:text="${trip.departureDate}"></td>
-            <td class="px-6 py-4" th:text="${trip.departureTime}"></td>
-            <td class="px-6 py-4" th:text="${trip.arrivalDate}"></td>
-            <td class="px-6 py-4" th:text="${trip.arrivalTime}"></td>
-            <td class="px-6 py-4" th:text="${trip.price}"></td>
-            <td class="px-6 py-4">
-                <form th:method="POST" th:action="@{'/createRequest/' + ${trip.id}}">
-                    <button class="text-gray-700 hover:text-gray-900">
-                        <span title="Забронировать" class="material-symbols-outlined">check</span>
-                    </button>
-                </form>
-            </td>
+            <td class="px-6 py-4" th:text="${driver.lastName}"></td>
+            <td class="px-6 py-4" th:text="${driver.firstName}"></td>
+            <td class="px-6 py-4" th:text="${driver.birthDate}"></td>
+            <td class="px-6 py-4" th:text="${driver.averageMark}"></td>
+            <td class="px-6 py-4" th:text="${driver.completedTripsAmount}"></td>
         </tr>
         </tbody>
     </table>

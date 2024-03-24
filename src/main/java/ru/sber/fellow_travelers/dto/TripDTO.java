@@ -3,6 +3,7 @@ package ru.sber.fellow_travelers.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import ru.sber.fellow_travelers.entity.Mark;
+import ru.sber.fellow_travelers.entity.Request;
 import ru.sber.fellow_travelers.entity.enums.TripStatus;
 import ru.sber.fellow_travelers.google_maps_api.response.Coordinates;
 

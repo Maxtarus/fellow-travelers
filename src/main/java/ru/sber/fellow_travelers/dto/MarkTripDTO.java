@@ -1,11 +1,19 @@
 package ru.sber.fellow_travelers.dto;
 
 import ru.sber.fellow_travelers.entity.Mark;
-import ru.sber.fellow_travelers.entity.Trip;
+
 
 public class MarkTripDTO {
     private TripDTO trip;
     private Mark mark;
+
+    public MarkTripDTO() { }
+
+    public MarkTripDTO(TripDTO trip, Mark mark) {
+        this.trip = trip;
+        this.mark = mark;
+    }
+
 
     public TripDTO getTrip() {
         return trip;
@@ -23,10 +31,4 @@ public class MarkTripDTO {
         this.mark = mark;
     }
 
-    public MarkTripDTO() { }
-
-    public MarkTripDTO(TripDTO trip, Mark mark) {
-        this.trip = trip;
-        this.mark = mark;
-    }
 }

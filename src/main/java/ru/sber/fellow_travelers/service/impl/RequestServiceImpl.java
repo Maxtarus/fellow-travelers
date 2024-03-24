@@ -49,6 +49,7 @@ public class RequestServiceImpl implements RequestService {
     public List<Request> findAvailableByDriverId(long id) {
         return findAll().stream()
                 .filter(request -> request.getTrip().getDriver().getId() == id)
+                .filter(request -> request.getTrip().getFreeSeats() > 0)
                 .filter(request -> request.getStatus().equals(RequestStatus.UNDER_CONSIDERATION))
                 .collect(Collectors.toList());
     }
@@ -77,7 +78,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> findAllApprovedForCompletedTrips(User passenger) {
+    public List<Request> findAllApprovedForCompletedTripsByPassenger(User passenger) {
         return requestRepository.findAllByPassengerId(passenger.getId(), TripStatus.COMPLETED, RequestStatus.APPROVED);
 
 //        return findAll()
@@ -87,5 +88,15 @@ public class RequestServiceImpl implements RequestService {
 //                .filter(request -> request.getTrip().getStatus().equals(TripStatus.COMPLETED))
 //                .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Request> findAllApprovedForCompletedTripByTripId(long id) {
+        return findAll().stream()
+                .filter(request -> request.getTrip().getId() == id)
+                .filter(request -> request.getTrip().getStatus().equals(TripStatus.COMPLETED))
+                .filter(request -> request.getStatus().equals(RequestStatus.APPROVED))
+                .collect(Collectors.toList());
+    }
+
 
 }

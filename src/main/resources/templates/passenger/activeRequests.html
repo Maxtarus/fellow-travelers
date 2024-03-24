@@ -52,6 +52,9 @@
                 №
             </th>
             <th scope="col" class="px-6 py-3">
+                Водитель
+            </th>
+            <th scope="col" class="px-6 py-3">
                 Начальная точка
             </th>
             <th scope="col" class="px-6 py-3">
@@ -86,6 +89,11 @@
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 th:text="${counter.incrementAndGet()}">
             </th>
+            <td class="px-6 py-4">
+                <a th:href="@{/driverInfo(tripId=${entry.value.id})}">
+                    <span title="Посмотреть информацию о водителе" class="material-symbols-outlined">visibility</span>
+                </a>
+            </td>
             <td class="px-6 py-4" th:text="${entry.value.startPoint}"></td>
             <td class="px-6 py-4" th:text="${entry.value.finalPoint}"></td>
             <td class="px-6 py-4" th:text="${entry.value.departureDate}"></td>
