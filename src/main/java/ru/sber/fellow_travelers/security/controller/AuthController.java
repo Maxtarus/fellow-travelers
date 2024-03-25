@@ -3,6 +3,9 @@ package ru.sber.fellow_travelers.security.controller;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ru.sber.fellow_travelers.dto.UserDTO;
-import ru.sber.fellow_travelers.entity.Role;
 import ru.sber.fellow_travelers.entity.User;
 import ru.sber.fellow_travelers.entity.enums.RoleType;
+import ru.sber.fellow_travelers.exception.UserNotFoundException;
 import ru.sber.fellow_travelers.security.service.AuthService;
 import ru.sber.fellow_travelers.security.service.JwtProvider;
 import ru.sber.fellow_travelers.service.RoleService;
@@ -23,6 +26,7 @@ import java.io.IOException;
 
 @Controller
 public class AuthController {
+    private static final Logger LOGGER = LogManager.getLogger(AuthController.class);
     private final AuthService authService;
     private final JwtProvider jwtProvider;
     private final RoleService roleService;
@@ -51,8 +55,11 @@ public class AuthController {
             return "login";
         }
 
-        User user = authService.signIn(userInfo.getUsername(), userInfo.getPassword());
-        if (user == null) {
+        User user;
+        try {
+            user = authService.signIn(userInfo.getUsername(), userInfo.getPassword());
+        } catch (AuthenticationException | UserNotFoundException e) {
+            LOGGER.error(e.getMessage());
             result.rejectValue("username", "", "Неверный логин или пароль!");
             return "login";
         }

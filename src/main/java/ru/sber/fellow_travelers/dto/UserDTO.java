@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public class UserDTO {
-//    private final boolean isPassenger = true;
     @NotBlank(message = "Введите email!")
     @Email(message = "Введите корректный email!")
     private String email;
@@ -26,11 +25,6 @@ public class UserDTO {
     private boolean isAdmin;
 
     public UserDTO() { }
-
-    public UserDTO(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
 
     public String getEmail() {
         return email;
@@ -59,10 +53,6 @@ public class UserDTO {
     public boolean isDriver() {
         return isDriver;
     }
-
-//    public boolean isPassenger() {
-//        return isPassenger;
-//    }
 
     public boolean isAdmin() {
         return isAdmin;

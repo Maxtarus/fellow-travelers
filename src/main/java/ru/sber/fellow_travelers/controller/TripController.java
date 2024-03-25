@@ -83,12 +83,8 @@ public class TripController {
         for (Trip trip : trips) {
             TripDTO tripDTO = tripMapper.toDTO(trip);
 
-            try {
-                tripDTO.setStartPointCoordinates(geoService.getGeocode(tripDTO.getStartPoint()));
-                tripDTO.setFinalPointCoordinates(geoService.getGeocode(tripDTO.getFinalPoint()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            tripDTO.setStartPointCoordinates(geoService.getPointCoordinates(tripDTO.getStartPoint()));
+            tripDTO.setFinalPointCoordinates(geoService.getPointCoordinates(tripDTO.getFinalPoint()));
 
             tripDTOs.add(tripDTO);
         }
@@ -136,12 +132,8 @@ public class TripController {
         for (Request request : approvedRequestsForCompletedTrips) {
             TripDTO tripDTO = tripMapper.toDTO(request.getTrip());
 
-            try {
-                tripDTO.setStartPointCoordinates(geoService.getGeocode(tripDTO.getStartPoint()));
-                tripDTO.setFinalPointCoordinates(geoService.getGeocode(tripDTO.getFinalPoint()));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            tripDTO.setStartPointCoordinates(geoService.getPointCoordinates(tripDTO.getStartPoint()));
+            tripDTO.setFinalPointCoordinates(geoService.getPointCoordinates(tripDTO.getFinalPoint()));
 
             if (!request.getTrip().getMarks().isEmpty()) {
 

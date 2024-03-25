@@ -11,11 +11,9 @@ import ru.sber.fellow_travelers.util.DateTimeUtils;
 @Component
 public class UserMapper {
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
 
-    public UserMapper(PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public UserMapper(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
     }
 
     public User toEntity(UserDTO userDTO) {
@@ -26,14 +24,14 @@ public class UserMapper {
         user.setLastName(userDTO.getLastName());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setBirthDate(userDTO.getBirthDate());
-        user.getRoles().add(roleRepository.findByType(RoleType.PASSENGER));
+        user.getUserRoleTypes().add(RoleType.PASSENGER);
 
         if (userDTO.isDriver()) {
-            user.getRoles().add(roleRepository.findByType(RoleType.DRIVER));
+            user.getUserRoleTypes().add(RoleType.DRIVER);
         }
 
         if (userDTO.isAdmin()) {
-            user.getRoles().add(roleRepository.findByType(RoleType.ADMIN));
+            user.getUserRoleTypes().add(RoleType.ADMIN);
         }
 
         return user;

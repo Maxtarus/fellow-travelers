@@ -15,7 +15,4 @@ public class GeocodeGeometry {
         return geocodeLocation;
     }
 
-    public void setGeocodeLocation(GeocodeLocation geocodeLocation) {
-        this.geocodeLocation = geocodeLocation;
-    }
 }

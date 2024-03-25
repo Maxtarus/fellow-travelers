@@ -14,7 +14,4 @@ public class GeocodeResult {
         return results;
     }
 
-    public void setResults(List<GeocodeObject> results) {
-        this.results = results;
-    }
 }

@@ -6,14 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class GeocodeObject {
     GeocodeGeometry geometry;
 
-    public GeocodeObject() {
-    }
+    public GeocodeObject() { }
 
     public GeocodeGeometry getGeometry() {
         return geometry;
     }
 
-    public void setGeometry(GeocodeGeometry geometry) {
-        this.geometry = geometry;
-    }
 }

@@ -19,3 +19,6 @@ app:
     secret-key: XmRmyPcUVL5VUhR+sfLtbdOvu2tEkGhqEMeKdC7B9LyrQTKa7E8qiROierc7TGVDg6IF0M98wCRt30wXCyjh7A==
     expiration: 86400000 #1 day in ms
     header-name: jwt
+
+google-maps:
+  api-key: f955861c4cmsh9cde810dbd664dfp136987jsnd77ba583120a

@@ -2,7 +2,7 @@ INSERT INTO roles(type) VALUES ('ADMIN');
 INSERT INTO roles(type) VALUES ('PASSENGER');
 INSERT INTO roles(type) VALUES ('DRIVER');
 
---Пароль у всех пользователей одинаковый - "1"
+--Пароль у всех пользователей одинаковый - "111"
 INSERT INTO users(email, password, first_name, last_name, phone_number, birth_date) VALUES ('admin@mail.ru', '$2a$10$/4PupSZXYVF4U6mD8CYY/emxqy3ZYodks.oGZfT062YJL1c1G0qZG', 'Роман', 'Касперский', '89997775544', '1998-08-21');
 INSERT INTO users(email, password, first_name, last_name, phone_number, birth_date) VALUES ('starmax@yandex.ru', '$2a$10$/4PupSZXYVF4U6mD8CYY/emxqy3ZYodks.oGZfT062YJL1c1G0qZG', 'Максим', 'Старостин', '89106154366', '2002-10-11');
 INSERT INTO users(email, password, first_name, last_name, phone_number, birth_date) VALUES ('imosolov@gmail.com', '$2a$10$/4PupSZXYVF4U6mD8CYY/emxqy3ZYodks.oGZfT062YJL1c1G0qZG', 'Иван', 'Мосолов', '89106176666', '2002-09-02');

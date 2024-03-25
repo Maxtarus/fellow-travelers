@@ -1,37 +1,50 @@
 package ru.sber.fellow_travelers.google_maps_api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.ResponseBody;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.sber.fellow_travelers.google_maps_api.response.Coordinates;
-import ru.sber.fellow_travelers.google_maps_api.response.GeocodeResult;
 
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
+
+import static ru.sber.fellow_travelers.google_maps_api.GooGleMapsApiStringConstants.*;
 
 @Service
 public class GeoService {
+    @Value("${google-maps.api-key}")
+    private static String API_KEY;
 
-    public Coordinates getGeocode(String address) throws IOException {
+    private final CoordinatesMapper mapper;
+
+    public GeoService(CoordinatesMapper mapper) {
+        this.mapper = mapper;
+    }
+
+    public Coordinates getPointCoordinates(String address) {
         OkHttpClient client = new OkHttpClient();
         String encodedAddress = URLEncoder.encode(address, StandardCharsets.UTF_8);
         Request request = new Request.Builder()
-                .url("https://google-maps-geocoding.p.rapidapi.com/geocode/json?language=en&address=" + encodedAddress)
+                .url(REQUEST_URL + encodedAddress)
                 .get()
-                .addHeader("x-rapidapi-host", "google-maps-geocoding.p.rapidapi.com")
-                .addHeader("x-rapidapi-key", "f955861c4cmsh9cde810dbd664dfp136987jsnd77ba583120a"/*  Use your API Key here */)
+                .addHeader(HOST_HEADER, HOST)
+                .addHeader(API_KEY_HEADER, API_KEY)
                 .build();
-        ResponseBody responseBody = client.newCall(request).execute().body();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        GeocodeResult result = objectMapper.readValue(responseBody.string(), GeocodeResult.class);
-        String latitude = result.getResults().get(0).getGeometry().getGeocodeLocation().getLatitude();
-        String longitude = result.getResults().get(0).getGeometry().getGeocodeLocation().getLongitude();
+        String response;
+        try {
+            response = Objects.requireNonNull(
+                            client.newCall(request)
+                                    .execute()
+                                    .body())
+                    .string();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        return new Coordinates(latitude, longitude);
+        return mapper.toCoordinates(response);
     }
 
 }

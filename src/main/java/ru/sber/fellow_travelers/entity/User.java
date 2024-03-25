@@ -129,7 +129,7 @@ public class User implements UserDetails {
         return roles;
     }
 
-    private List<RoleType> getUserRoleTypes() {
+    public List<RoleType> getUserRoleTypes() {
         return roles.stream()
                 .map(Role::getType)
                 .collect(Collectors.toList());
