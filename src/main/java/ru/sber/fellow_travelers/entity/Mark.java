@@ -20,7 +20,7 @@ public class Mark {
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
     @Enumerated(EnumType.STRING)
-    @Column(name = "type")
+    @Column(name = "mark_type")
     private MarkType markType;
 
     public Mark() { }
