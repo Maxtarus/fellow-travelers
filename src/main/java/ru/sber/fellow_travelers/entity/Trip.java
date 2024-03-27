@@ -41,6 +41,13 @@ public class Trip {
 
     public Trip() { }
 
+    public Trip(Long id, Integer freeSeats, TripStatus status, User driver) {
+        this.id = id;
+        this.freeSeats = freeSeats;
+        this.status = status;
+        this.driver = driver;
+    }
+
     public Trip(Long id, String startPoint, String finalPoint, LocalDateTime departureTime,
                 LocalDateTime arrivalTime, Integer freeSeats, Integer price,
                 TripStatus status, User driver) {

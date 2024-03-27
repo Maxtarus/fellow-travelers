@@ -3,17 +3,22 @@ package ru.sber.fellow_travelers.mapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.sber.fellow_travelers.dto.UserDTO;
+import ru.sber.fellow_travelers.entity.Role;
 import ru.sber.fellow_travelers.entity.User;
 import ru.sber.fellow_travelers.entity.enums.RoleType;
 import ru.sber.fellow_travelers.repository.RoleRepository;
 import ru.sber.fellow_travelers.util.DateTimeUtils;
 
+import java.util.Set;
+
 @Component
 public class UserMapper {
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserMapper(PasswordEncoder passwordEncoder) {
+    public UserMapper(PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     public User toEntity(UserDTO userDTO) {
@@ -24,14 +29,15 @@ public class UserMapper {
         user.setLastName(userDTO.getLastName());
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setBirthDate(userDTO.getBirthDate());
-        user.getUserRoleTypes().add(RoleType.PASSENGER);
+        Set<Role> userRoles =  user.getRoles();
+        userRoles.add(roleRepository.findByType(RoleType.PASSENGER));
 
         if (userDTO.isDriver()) {
-            user.getUserRoleTypes().add(RoleType.DRIVER);
+            userRoles.add(roleRepository.findByType(RoleType.DRIVER));
         }
 
         if (userDTO.isAdmin()) {
-            user.getUserRoleTypes().add(RoleType.ADMIN);
+            userRoles.add(roleRepository.findByType(RoleType.ADMIN));
         }
 
         return user;

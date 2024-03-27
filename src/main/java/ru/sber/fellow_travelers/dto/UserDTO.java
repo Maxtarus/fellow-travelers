@@ -89,4 +89,5 @@ public class UserDTO {
     public void setAdmin(boolean admin) {
         isAdmin = admin;
     }
+
 }

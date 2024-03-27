@@ -36,14 +36,19 @@ public class User implements UserDetails {
     private Set<Role> roles = new HashSet<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
     private List<Trip> trips = new ArrayList<>();
-    @OneToMany(mappedBy = "fromUser")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fromUser")
     private List<Mark> marksFromUsers = new ArrayList<>();
-    @OneToMany(mappedBy = "toUser")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "toUser")
     private List<Mark> marksToUsers = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger")
     private List<Request> requests = new ArrayList<>();
 
     public User() { }
+
+    public User(Long id, String email) {
+        this.id = id;
+        this.email = email;
+    }
 
     public User(long id, String email, String password, String firstName,
                 String lastName, String phoneNumber, String birthDate, Set<Role> roles) {
@@ -193,6 +198,10 @@ public class User implements UserDetails {
 
     public void setTrips(List<Trip> trips) {
         this.trips = trips;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

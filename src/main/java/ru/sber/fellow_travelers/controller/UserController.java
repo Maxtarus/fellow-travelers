@@ -38,7 +38,12 @@ public class UserController {
 
     @PostMapping("deleteUser/{id}")
     public String deleteUser(@PathVariable("id") long id) {
-        userService.deleteById(id);
+        try {
+            userService.deleteById(id);
+        } catch (UserNotFoundException e) {
+            LOGGER.error(e.getMessage());
+        }
+
         return "redirect:/registeredUsers";
     }
 

@@ -25,6 +25,10 @@ public class Mark {
 
     public Mark() { }
 
+    public Mark(MarkType markType) {
+        this.markType = markType;
+    }
+
     public Mark(User toUser, User fromUser, Trip trip, MarkType markType) {
         this.toUser = toUser;
         this.fromUser = fromUser;

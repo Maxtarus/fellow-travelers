@@ -35,11 +35,7 @@ public class GeoService {
 
         String response;
         try {
-            response = Objects.requireNonNull(
-                            client.newCall(request)
-                                    .execute()
-                                    .body())
-                    .string();
+            response = Objects.requireNonNull(client.newCall(request).execute().body()).string();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

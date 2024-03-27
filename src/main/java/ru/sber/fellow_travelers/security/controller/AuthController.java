@@ -37,7 +37,7 @@ public class AuthController {
         this.roleService = roleService;
     }
 
-    @GetMapping("/")
+    @GetMapping
     public ModelAndView loginPage() {
         ModelAndView view = new ModelAndView("login");
         view.addObject("user", new User());
@@ -82,7 +82,7 @@ public class AuthController {
             response.sendRedirect("/activeRequests");
         }
 
-        return null;
+        return user;
     }
 
     @GetMapping("/signUp")
@@ -105,9 +105,8 @@ public class AuthController {
 
         User user = authService.signUp(registerUser);
         session.setAttribute("user", user);
-
         response.addCookie(jwtProvider.getAuthorizeCookie(user));
         response.sendRedirect("/");
-        return null;
+        return user;
     }
 }

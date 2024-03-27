@@ -22,7 +22,7 @@ public class TripMapper {
         trip.setArrivalTime(DateTimeUtils.toLocalDateTime(tripDTO.getArrivalDate(), tripDTO.getArrivalTime()));
         trip.setFreeSeats(tripDTO.getFreeSeats());
         trip.setPrice(tripDTO.getPrice());
-        trip.setStatus(tripDTO.getStatus());
+//        trip.setStatus(tripDTO.getStatus());
         trip.setMarks(tripDTO.getMarks());
         return trip;
     }

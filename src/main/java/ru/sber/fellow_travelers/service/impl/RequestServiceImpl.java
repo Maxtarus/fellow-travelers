@@ -80,13 +80,6 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> findAllApprovedForCompletedTripsByPassenger(User passenger) {
         return requestRepository.findAllByPassengerId(passenger.getId(), TripStatus.COMPLETED, RequestStatus.APPROVED);
-
-//        return findAll()
-//                .stream()
-//                .filter(request -> request.getPassenger().equals(passenger))
-//                .filter(request -> request.getStatus().equals(RequestStatus.APPROVED))
-//                .filter(request -> request.getTrip().getStatus().equals(TripStatus.COMPLETED))
-//                .collect(Collectors.toList());
     }
 
     @Override
@@ -97,6 +90,4 @@ public class RequestServiceImpl implements RequestService {
                 .filter(request -> request.getStatus().equals(RequestStatus.APPROVED))
                 .collect(Collectors.toList());
     }
-
-
 }

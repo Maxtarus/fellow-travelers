@@ -16,6 +16,7 @@ import ru.sber.fellow_travelers.entity.Request;
 import ru.sber.fellow_travelers.entity.Trip;
 import ru.sber.fellow_travelers.entity.User;
 import ru.sber.fellow_travelers.entity.enums.MarkType;
+import ru.sber.fellow_travelers.entity.enums.TripStatus;
 import ru.sber.fellow_travelers.exception.TripNotFoundException;
 import ru.sber.fellow_travelers.google_maps_api.GeoService;
 import ru.sber.fellow_travelers.mapper.DriverMapper;
@@ -233,7 +234,7 @@ public class TripController {
     }
 
     @GetMapping("/editTrip/{id}")
-    public ModelAndView showEditUserPage(@PathVariable("id") long id) {
+    public ModelAndView showEditTripPage(@PathVariable("id") long id) {
         ModelAndView view = new ModelAndView("driver/editTrip");
 
         try {
@@ -247,7 +248,7 @@ public class TripController {
     }
 
     @PostMapping("/editTrip/{id}")
-    public String editUser(@PathVariable("id") long id,
+    public String editTrip(@PathVariable("id") long id,
                            @ModelAttribute("trip") @Valid TripDTO tripDTO,
                            BindingResult result) {
         if (result.hasErrors()) {
@@ -258,6 +259,7 @@ public class TripController {
         trip.setId(id);
         User driver = AuthUtils.getUserFromContext();
         trip.setDriver(driver);
+        trip.setStatus(TripStatus.NOT_COMPLETED);
         tripService.save(trip);
         return "redirect:/createdTrips";
     }
