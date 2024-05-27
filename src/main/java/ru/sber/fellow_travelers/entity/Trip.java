@@ -44,4 +44,7 @@ public class Trip {
     private List<Review> reviews = new ArrayList<>();
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "trip")
     private List<TripStopover> tripStopovers = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "trip_details_id", referencedColumnName = "id")
+    private TripDetails tripDetails;
 }
