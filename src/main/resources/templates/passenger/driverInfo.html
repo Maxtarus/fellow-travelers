@@ -3,80 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <title>Информация о водителе</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/main_style.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"/>
 </head>
 <body>
-<nav class="bg-white border-gray-200 px-2 rounded" style="position: fixed; top: 0; width: 100%">
-    <div class="header-container flex flex-wrap flex-col items-center justify-between mx-auto">
-        <a class="flex items-center mb-2">
-            <img th:src="@{/images/logo_header.jpg}" class="h-6 mr-3" alt=""/>
-            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">Информационная система "Попутчики"</h1>
-        </a>
-        <ul class="flex item-center space-x-1 p-1 mt-4 border border-gray-100 rounded-lg bg-gray-50">
-            <li>
-                <a th:href="@{/availableTrips}"
-                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
-                    Доступные поездки
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/activeRequests}"
-                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
-                    Мои заявки
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/passengerTripsHistory}"
-                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
-                    История поездок
-                </a>
-            </li>
-            <li>
-                <a th:href="@{/logout}"
-                   class="block py-2 pl-3 pr-4 text-gray-700 bg-blue-700 rounded md:bg-transparent md:text-blue-700"
-                   aria-current="page">Выйти из системы</a>
-            </li>
-        </ul>
+    <div class="root-wrap">
+        <header>
+            <div class="header">
+                <div class="header_wrapper middle-wrap">
+                    <div class="header_logo">
+                        <img th:src="@{/images/eazy_trip.png}" alt="" style="width: 70%">
+                    </div>
+                    <div class="nav-panel" style="margin-top: 10px; margin-bottom: 10px">
+                        <ul class="flex item-center space-x-1 p-1 border border-gray-100 rounded-lg bg-gray-50" style="text-align: center; width: 120%">
+                            <li style="width: 100%">
+                                <a th:href="@{/searchTrips}"
+                                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                    Найти поездку
+                                </a>
+                            </li>
+                            <li style="width: 100%">
+                                <a th:href="@{/activeRequests}"
+                                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                    Мои заявки
+                                </a>
+                            </li>
+                            <li style="width: 100%">
+                                <a th:href="@{/passengerTripsHistory}"
+                                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                    История поездок
+                                </a>
+                            </li>
+                            <li style="width: 100%">
+                                <a th:href="@{/logout}"
+                                   class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700"
+                                   aria-current="page">Выйти из системы</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button aria-label="Профиль" aria-controls="user-menu" aria-expanded="false" type="button">
+                        <div class="user">
+                            <img src="https://cdn.blablacar.com/comuto3/images/avatar/pixar/passenger-m-02.svg" alt="">
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </header>
     </div>
-</nav>
-<div class="overflow-x-auto shadow-md sm:rounded-lg" style="margin-top: 230px">
-    <table class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <caption class="p-5 text-lg font-semibold text-center rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+    <div class="params-form" style="position: relative" th:object="${driver}">
+        <h1 class="mb-10 text-xl text-center font-semibold leading-none tracking-tight text-gray-900 md:text-xl lg:text-xl dark:text-white">
             Информация о водителе
-        </caption>
-        <thead class="text-l text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-            <th style="text-align: center" scope="col" class="px-6 py-3">
-                Фамилия
-            </th>
-            <th style="text-align: center" scope="col" class="px-6 py-3">
-                Имя
-            </th>
-            <th style="text-align: center" scope="col" class="px-6 py-3">
-                Дата рождения
-            </th>
-            <th style="text-align: center" scope="col" class="px-6 py-3">
-                Рейтинг
-            </th>
-            <th style="text-align: center" scope="col" class="px-6 py-3">
-                Количество завершённых поездок
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:object="${driver}"
-            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <td class="px-6 py-4" th:text="${driver.lastName}"></td>
-            <td class="px-6 py-4" th:text="${driver.firstName}"></td>
-            <td class="px-6 py-4" th:text="${driver.birthDate}"></td>
-            <td class="px-6 py-4" th:text="${driver.averageMark}"></td>
-            <td class="px-6 py-4" th:text="${driver.completedTripsAmount}"></td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+        </h1>
+        <div class="mb-6">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" th:text="'Имя: ' + ${driver.lastName} + ' ' + ${driver.firstName}"></label>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" th:text="'Возраст: ' + ${driver.age}"></label>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" th:text="'Рейтинг: ' + ${driver.averageMark} + '/5'"></label>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" th:text="'Количество завершённых поездок: ' + ${driver.completedTripsAmount}"></label>
+        </div>
+    </div>
+
+<!--    <div class="overflow-x-auto shadow-md sm:rounded-lg">-->
+<!--        <table class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">-->
+<!--            <caption class="p-5 text-lg font-semibold text-center rtl:text-right text-gray-900 bg-white dark:text-white dark:bg-gray-800">-->
+<!--                Информация о водителе-->
+<!--            </caption>-->
+<!--            <thead class="text-l text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">-->
+<!--            <tr>-->
+<!--                <th style="text-align: center" scope="col" class="px-6 py-3">-->
+<!--                    Фамилия-->
+<!--                </th>-->
+<!--                <th style="text-align: center" scope="col" class="px-6 py-3">-->
+<!--                    Имя-->
+<!--                </th>-->
+<!--                <th style="text-align: center" scope="col" class="px-6 py-3">-->
+<!--                    Возраст-->
+<!--                </th>-->
+<!--                <th style="text-align: center" scope="col" class="px-6 py-3">-->
+<!--                    Рейтинг-->
+<!--                </th>-->
+<!--                <th style="text-align: center" scope="col" class="px-6 py-3">-->
+<!--                    Количество завершённых поездок-->
+<!--                </th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr th:object="${driver}"-->
+<!--                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">-->
+<!--                <td class="px-6 py-4" th:text="${driver.lastName}"></td>-->
+<!--                <td class="px-6 py-4" th:text="${driver.firstName}"></td>-->
+<!--                <td class="px-6 py-4" th:text="${driver.age}"></td>-->
+<!--                <td class="px-6 py-4" th:text="${driver.averageMark} + '/5'"></td>-->
+<!--                <td class="px-6 py-4" th:text="${driver.completedTripsAmount}"></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 </html>

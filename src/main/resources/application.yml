@@ -20,5 +20,8 @@ app:
     expiration: 86400000 #1 day in ms
     header-name: jwt
 
-google-maps:
-  api-key: f955861c4cmsh9cde810dbd664dfp136987jsnd77ba583120a
+api:
+  yandex-geocoder:
+    name: yandex-geocoder-client
+    url: https://geocode-maps.yandex.ru/1.x
+    api-key: 038c822b-fe4f-4429-ae45-5e64f50803d0

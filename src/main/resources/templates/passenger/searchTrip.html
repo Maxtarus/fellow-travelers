@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница пассажира</title>
+    <link rel="stylesheet" th:href="@{/css/main_style.css}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"/>
+    <script src="//api-maps.yandex.ru/2.1/?lang=ru_RU&suggest_apikey=4cf37c47-3b48-46d3-ab63-beedf038b247"></script>
+</head>
+<body>
+<div class="root-wrap">
+    <header>
+        <div class="header">
+            <div class="header_wrapper middle-wrap">
+                <div class="header_logo">
+                    <img th:src="@{/images/eazy_trip.png}" alt="" style="width: 70%">
+                </div>
+                <div class="nav-panel" style="margin-top: 10px; margin-bottom: 10px">
+                    <ul class="flex item-center space-x-1 p-1 border border-gray-100 rounded-lg bg-gray-50" style="text-align: center; width: 120%">
+                        <li style="width: 100%">
+                            <a th:href="@{/searchTrip}"
+                               class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                Найти поездку
+                            </a>
+                        </li>
+                        <li style="width: 100%">
+                            <a th:href="@{/activeRequests}"
+                               class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                Мои заявки
+                            </a>
+                        </li>
+                        <li style="width: 100%">
+                            <a th:href="@{/passengerTripsHistory}"
+                               class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                История поездок
+                            </a>
+                        </li>
+                        <li style="width: 100%">
+                            <a th:href="@{/logout}"
+                               class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700"
+                               aria-current="page">Выйти из системы</a>
+                        </li>
+                    </ul>
+                </div>
+                <button aria-label="Профиль" aria-controls="user-menu" aria-expanded="false" type="button">
+                    <div class="user">
+                        <img src="https://cdn.blablacar.com/comuto3/images/avatar/pixar/passenger-m-02.svg" alt="">
+                    </div>
+                </button>
+            </div>
+        </div>
+    </header>
+</div>
+<h1 style="padding: 24px 24px 32px; text-align: center; font-size: 24px">
+    Найдите поездку прямо сейчас
+</h1>
+<img th:src="@{/images/ft.jpg}" alt="" style="width: 100%; height: 400px; position: absolute">
+<div class="search-params-row" style="position: relative">
+    <form method="GET" th:action="@{/foundTrips}" style="display: flex; border: 0">
+        <div class="search-input-field" style="flex: 0.8 0 0;">
+            <div class="point-circle">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="kirk-icon" role="img" aria-hidden="true" >
+                    <g color="red">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" fill="currentColor"></path>
+                    </g>
+                </svg>
+            </div>
+            <div>
+                <label class="search-label" for="from"></label>
+                <input type="text" th:name="startPoint" id="from" class="search-input" placeholder="Откуда" style="background-color: transparent; padding: 0 8px 0 40px; border-radius: 16px;">
+                <script type="text/javascript">
+                    ymaps.ready(init);
+                    function init() {
+                        const suggestView = new ymaps.SuggestView('from');
+                        suggestView.events.add('select',function(event){
+                            const selected = event.get('item').value;
+                            ymaps.geocode(selected,{
+                                results:1
+                            }).then(function(res) {
+                                return ymaps.geocode(res.geoObjects.get(0).geometry.getCoordinates(),{
+                                    kind:'district',
+                                    results:10
+                                }).then(function(res) {
+                                    var founded = res['metaData']['geocoder']['found'];
+                                    $('label.suggest .description').html("");
+                                    for (let i=0; i<=founded-1; i++){
+                                        const info = res.geoObjects.get(i).properties.getAll();
+                                        let name = info['name'];
+                                        if (name.search('район')!==-1){
+                                            name=name.replace(' район','');
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    }
+                </script>
+            </div>
+        </div>
+        <hr class="block-line">
+        <div class="search-input-field" style="flex: 0.8 0 0;">
+            <div class="point-circle">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="kirk-icon" role="img" aria-hidden="true" >
+                    <g color="black">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z" fill="currentColor"></path>
+                    </g>
+                </svg>
+            </div>
+            <div>
+                <label class="search-label" for="to"></label>
+                <input id="to" type="text" th:name="finalPoint" class="search-input" placeholder="Куда" style="background-color: transparent; padding: 0 8px 0 40px; border-radius: 16px;">
+                <script type="text/javascript">
+                    ymaps.ready(init);
+                    function init(){
+                        const suggestView = new ymaps.SuggestView('to');
+                        suggestView.events.add('select',function(event){
+                            const selected = event.get('item').value;
+                            ymaps.geocode(selected,{
+                                results:1
+                            }).then(function(res){
+                                return ymaps.geocode(res.geoObjects.get(0).geometry.getCoordinates(),{
+                                    kind:'district',
+                                    results:10
+                                }).then(function(res){
+                                    var founded=res['metaData']['geocoder']['found'];
+                                    $('label.suggest .description').html("");
+                                    for (let i=0; i<=founded-1; i++){
+                                        const info = res.geoObjects.get(i).properties.getAll();
+                                        console.log(info);
+                                        let name = info['name'];
+                                        if(name.search('район')!==-1){
+                                            name=name.replace(' район','');
+                                            console.log(name);
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    }
+                </script>
+            </div>
+        </div>
+        <hr class="block-line">
+        <div class="search-input-field" style="flex: 0.3 0 0;">
+            <label class="search-label" for="date"></label>
+            <input type="date" th:name="departureDate" id="date" class="search-input" style="background-color: transparent; border-radius: 16px; line-height: 2rem; color: hsla(189, 89%, 17%, 1);">
+        </div>
+        <hr class="block-line">
+        <div class="search-input-field" style="flex: 0.5 1 0;">
+            <div class="point-circle">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="kirk-icon" role="img" aria-hidden="true">
+                    <g color="black">
+                        <path fill="currentColor" fill-rule="evenodd" d="M15.3348 7.41667c0 2.07071-1.6793 3.75003-3.75 3.75003-2.07072 0-3.75-1.67932-3.75-3.75003v-.83334c0-2.07071 1.67928-3.75 3.75-3.75 2.0707 0 3.75 1.67929 3.75 3.75v.83334Zm-8.33334 0C7.00146 9.94762 9.05385 12 11.5848 12c2.5309 0 4.5833-2.05238 4.5833-4.58333v-.83334C16.1681 4.05238 14.1157 2 11.5848 2 9.05385 2 7.00146 4.05238 7.00146 6.58333v.83334ZM20.3335 20.75v-1.7433c0-1.6904-1.1257-3.1725-2.7522-3.6154-2.0325-.5548-4.0791-.8913-5.9978-.8913-1.91873 0-3.96534.3365-5.99806.8914-1.6263.4428-2.75194 1.9249-2.75194 3.6153V20.75c0 .2301.18654.4167.41666.4167H19.9168c.2301 0 .4167-.1866.4167-.4167Zm-2.9714-4.5547c1.2631.344 2.1381 1.4959 2.1381 2.8114v1.3266H3.66683v-1.3266c0-1.3155.87493-2.4674 2.13781-2.8113 1.9672-.537 3.9441-.8621 5.77886-.8621 1.8347 0 3.8117.3251 5.7786.862Z" clip-rule="evenodd"></path>
+                    </g>
+                </svg>
+            </div>
+            <label class="search-label" for="passengers"></label>
+            <input id="passengers" th:name="passengersNumber" type="number" class="search-input" placeholder="Число пассажиров" name="toInputValue" min="1" max="6" style="background-color: transparent; padding: 0 8px 0 40px;  border-radius: 16px;">
+        </div>
+        <div class="search-input-field" style="flex: 0.3 0 0%">
+            <button type="submit" class="search-btn" style="background: #588f27">
+                Поиск
+            </button>
+        </div>
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
+</html>

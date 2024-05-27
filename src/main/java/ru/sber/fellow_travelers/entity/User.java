@@ -1,6 +1,7 @@
 package ru.sber.fellow_travelers.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.sber.fellow_travelers.entity.enums.RoleType;
@@ -10,12 +11,19 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
+@ToString(exclude = {"trips", "marksFromUsers", "marksToUsers", "requests" })
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
+    @EqualsAndHashCode.Include
     private Long id;
     @Column(name = "email", nullable = false, unique = true, length = 50)
     private String email;
@@ -34,39 +42,14 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "driver")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "driver")
     private List<Trip> trips = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "fromUser")
-    private List<Mark> marksFromUsers = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "toUser")
-    private List<Mark> marksToUsers = new ArrayList<>();
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "passenger")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "fromUser")
+    private List<Review> marksFromUsers = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "toUser")
+    private List<Review> marksToUsers = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "passenger")
     private List<Request> requests = new ArrayList<>();
-
-    public User() { }
-
-    public User(Long id, String email) {
-        this.id = id;
-        this.email = email;
-    }
-
-    public User(long id, String email, String password, String firstName,
-                String lastName, String phoneNumber, String birthDate, Set<Role> roles) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNumber = phoneNumber;
-        this.birthDate = LocalDate.parse(birthDate);
-        this.roles = roles;
-    }
-
-    public User(long id, String email, String password) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -98,42 +81,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getBirthDate() {
-        return String.valueOf(birthDate);
-    }
-
-    public List<Request> getRequests() {
-        return requests;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
     public List<RoleType> getUserRoleTypes() {
         return roles.stream()
                 .map(Role::getType)
@@ -148,78 +95,4 @@ public class User implements UserDetails {
         return getUserRoleTypes().contains(RoleType.DRIVER);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setBirthDate(String birthDate) {
-        this.birthDate = DateTimeUtils.toISO(birthDate);
-    }
-
-    public List<Mark> getMarksFromUsers() {
-        return marksFromUsers;
-    }
-
-    public void setMarksFromUsers(List<Mark> marksFromUsers) {
-        this.marksFromUsers = marksFromUsers;
-    }
-
-    public List<Mark> getMarksToUsers() {
-        return marksToUsers;
-    }
-
-    public void setMarksToUsers(List<Mark> marksToUsers) {
-        this.marksToUsers = marksToUsers;
-    }
-
-    public List<Trip> getTrips() {
-        return trips;
-    }
-
-    public void setTrips(List<Trip> trips) {
-        this.trips = trips;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        User user = (User) o;
-        return Objects.equals(id, user.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

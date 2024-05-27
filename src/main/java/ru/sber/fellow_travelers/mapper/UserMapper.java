@@ -50,7 +50,7 @@ public class UserMapper {
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
         userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setBirthDate(DateTimeUtils.convertToInputFormat(user.getBirthDate()));
+        userDTO.setBirthDate(user.getBirthDate());
         userDTO.setDriver(user.isDriver());
         userDTO.setAdmin(user.isAdmin());
         return userDTO;

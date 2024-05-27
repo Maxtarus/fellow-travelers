@@ -3,7 +3,6 @@ package ru.sber.fellow_travelers.mapper;
 import org.springframework.stereotype.Component;
 import ru.sber.fellow_travelers.dto.TripDTO;
 import ru.sber.fellow_travelers.entity.Trip;
-import ru.sber.fellow_travelers.entity.enums.TripStatus;
 import ru.sber.fellow_travelers.util.DateTimeUtils;
 
 @Component
@@ -23,7 +22,7 @@ public class TripMapper {
         trip.setFreeSeats(tripDTO.getFreeSeats());
         trip.setPrice(tripDTO.getPrice());
 //        trip.setStatus(tripDTO.getStatus());
-        trip.setMarks(tripDTO.getMarks());
+        trip.setReviews(tripDTO.getMarks());
         return trip;
     }
 
@@ -38,9 +37,9 @@ public class TripMapper {
         tripDTO.setArrivalTime(DateTimeUtils.fromLocalDateTimeToStringTime(trip.getArrivalTime()));
         tripDTO.setFreeSeats(trip.getFreeSeats());
         tripDTO.setPrice(trip.getPrice());
-        tripDTO.setStatus(trip.getStatus());
+        tripDTO.setStatus(trip.getTripStatus());
         tripDTO.setDriver(userMapper.toDTO(trip.getDriver()));
-        tripDTO.setMarks(trip.getMarks());
+        tripDTO.setMarks(trip.getReviews());
         return tripDTO;
     }
 }

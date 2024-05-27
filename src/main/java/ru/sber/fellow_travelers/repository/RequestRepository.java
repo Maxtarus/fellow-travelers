@@ -17,10 +17,10 @@ public interface RequestRepository extends CrudRepository<Request, Long> {
     @Query(value =
             "SELECT request " +
             "FROM Request request " +
-                "JOIN request.passenger rp ON rp.id =:passengerId " +
+                "JOIN request.passenger rp ON rp.id = :passengerId " +
                 "JOIN request.trip " +
-            "WHERE request.trip.status = :tripStatus " +
-                "AND request.status = :requestStatus"
+            "WHERE request.trip.tripStatus = :tripStatus " +
+                "AND request.requestStatus = :requestStatus"
     )
     List<Request> findAllByPassengerId(@Param("passengerId") long passengerId,
                                        @Param("tripStatus") TripStatus tripStatus,

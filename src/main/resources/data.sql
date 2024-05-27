@@ -41,41 +41,41 @@ INSERT INTO trips(start_point, final_point, departure_time, arrival_time, free_s
 INSERT INTO trips(start_point, final_point, departure_time, arrival_time, free_seats, price, status, driver_id) VALUES ('Скопин', 'Пронск', '2024-04-10 17:30:00', '2024-04-10 23:00:00', 0, 840, 'COMPLETED', 5);
 INSERT INTO trips(start_point, final_point, departure_time, arrival_time, free_seats, price, status, driver_id) VALUES ('Скопин', 'Пронск', '2024-05-10 07:45:00', '2024-05-10 18:25:00', 3, 400, 'COMPLETED', 5);
 
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 1, 4);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 4, 4);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 5, 4);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 1, 4);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 4, 4);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 5, 4);
 
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 3, 5);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 5, 5);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 3, 5);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 5, 5);
 
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 1, 8);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 2, 8);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 4, 8);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 5, 8);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 1, 8);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 2, 8);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 4, 8);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 5, 8);
 
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 5, 9);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 5, 9);
 
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 1, 12);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('REJECTED', 3, 12);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 2, 13);
-INSERT INTO requests(status, passenger_id, trip_id) VALUES ('APPROVED', 4, 13);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 1, 12);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('REJECTED', 1, 3, 12);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 2, 13);
+INSERT INTO requests(status, passengers_number, passenger_id, trip_id) VALUES ('APPROVED', 1, 4, 13);
 
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (2, 1, 4, 'EXCELLENT');
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (2, 4, 4, 'GOOD');
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (2, 5, 4, 'NORMAL');
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (2, 1, 4, 'EXCELLENT', null);
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (2, 4, 4, 'GOOD', null);
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (2, 5, 4, 'NORMAL', null);
 
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (2, 3, 5, 'EXCELLENT');
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (2,  5, 5, 'EXPECTATIONS_NOT_FULFILLED');
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (2, 3, 5, 'EXCELLENT', null);
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (2,  5, 5, 'EXPECTATIONS_NOT_FULFILLED', null);
 
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (3, 1, 8, 'EXCELLENT');
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (3, 2, 8, 'EXCELLENT');
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (3, 4, 8, 'GOOD');
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (3, 1, 8, 'EXCELLENT', null);
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (3, 2, 8, 'EXCELLENT', null);
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (3, 4, 8, 'GOOD', null);
 
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (3, 5, 9, 'EXCELLENT');
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (3, 5, 9, 'EXCELLENT', null);
 
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (5, 1, 12, 'DISLIKE');
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (5, 1, 12, 'DISLIKE', null);
 
-INSERT INTO marks(to_user_id, from_user_id, trip_id, mark_type) VALUES (5, 2, 13, 'EXPECTATIONS_NOT_FULFILLED');
+INSERT INTO reviews(to_user_id, from_user_id, trip_id, mark_type, comment) VALUES (5, 2, 13, 'EXPECTATIONS_NOT_FULFILLED', null);
 
 
 

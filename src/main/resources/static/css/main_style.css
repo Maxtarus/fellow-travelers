@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+body {
+    background-size: 120%;
+    background-repeat: no-repeat;
+}
+
+.th {
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+.header-container {
+    width: 100%;
+    background-color: #dcefd7;
+    text-align: center;
+    padding-bottom: 25px;
+}
+
+.header-container img {
+    height: 120px;
+    margin-top: 10px;
+    border: 5px solid #50e741;
+    border-radius: 50%;
+}
+
+.params-form {
+    background: white;
+    position: absolute;
+    color: white;
+    width: 500px;
+    margin: 20px auto 20px auto;
+    padding: 24px;
+    border: 3px solid #1f8108;
+    border-radius: 16px;
+    align-items: center;
+}
+
+.add-button {
+    font-family: inherit;
+    position: relative;
+    padding: 0;
+    cursor: pointer;
+    border: 1px solid #0000;
+    color: white;
+    background-color: #1f8108;
+    border-radius: 16px;
+    font-size: 17px;
+    height: 52px;
+    width: 250px;
+    margin: auto auto 20px auto;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.stars i{
+    font-size: 18px;
+    color: #28a745;
+}
+
+.infoWindow {
+    width: 250px;
+    padding: 15px 15px 15px 50px;
+
+    position: relative;
+
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+}
+
+.infoIcon {
+    width: 30px;
+    height: 30px;
+
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+}
+
+.root-wrap {
+    align-items: flex-start;
+    background: #588f27;
+    display: grid;
+    grid-template:
+        "header" auto
+        "main" 1fr
+        "footer" auto/100%;
+}
+
+.middle-wrap {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.header {
+    display: block;
+    width: 100%;
+}
+
+.header .middle-wrap {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.header_logo {
+    align-items: center;
+    display: inline-flex;
+}
+
+.user {
+    height: 48px;
+    margin-left: 280px
+}
+
+.search-params-row {
+    flex-direction: column;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 15px;
+    display: flex;
+}
+
+.search-input-field {
+    position: relative;
+    width: 100%;
+    align-items: center;
+    background-color: #f2f3f4;
+    border: 3px hsla(0, 0%, 100%, 1);
+    border-radius: 16px;
+    transition: all 200ms ease-out;
+    height: 52px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.point-circle {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.kirk-icon {
+    height: 24px;
+    width: 24px;
+    fill: hsla(189, 13%, 50%, 1);
+}
+
+.search-label {
+    border: 0;
+    clip: rect(0px, 0px, 0px, 0px);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.search-input {
+    width: 100%;
+    border: 0;
+    margin: 0;
+    display: flex;
+    height: 50px;
+    padding: 0 8px 0 40px;
+    outline: 0 solid transparent;
+    background-color: transparent;
+    align-items: end;
+    position: relative;
+    z-index: 2;
+    font: 400 16px/20px "gt-eesti", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: hsla(189, 89%, 17%, 1);
+    text-overflow: ellipsis;
+}
+
+.search-btn {
+    font: 400 16px/20px "gt-eesti", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border: 0 solid transparent;
+    border-radius: 16px;
+    height: 56px;
+    background: #588f27;
+    color: #f2f3f4;
+    width: 100%;
+    cursor: pointer;
+}
+
+.feedback-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.rating {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+    color: orange;
+}
+
+.rating input:checked ~ label {
+    color: orange;
+}
+
+.comment {
+    margin-bottom: 20px;
+}
+
+.comment textarea {
+    width: 100%;
+    height: 100px;
+    resize: none;
+}
+
+.submit-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}

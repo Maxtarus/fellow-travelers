@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Выбор роли</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" />
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{main_style.css}">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.0.0/css/bootstrap.min.css}"/>
 </head>
 <body>
@@ -33,7 +33,7 @@
                     </a>
                 </li>
                 <li th:if="${user.roles.contains(rolePassenger)}">
-                    <a th:href="@{/activeRequests}" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                    <a th:href="@{/searchTrips}" class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
                         Пассажир
                     </a>
                 </li>

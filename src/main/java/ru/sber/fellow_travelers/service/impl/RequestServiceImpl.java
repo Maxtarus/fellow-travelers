@@ -41,7 +41,7 @@ public class RequestServiceImpl implements RequestService {
     public List<Request> findAllByPassengerId(long id) {
         return findAll().stream()
                 .filter(request -> request.getPassenger().getId() == id)
-                .filter(request -> request.getTrip().getStatus().equals(TripStatus.NOT_COMPLETED))
+                .filter(request -> request.getTrip().getTripStatus().equals(TripStatus.NOT_COMPLETED))
                 .collect(Collectors.toList());
     }
 
@@ -50,7 +50,7 @@ public class RequestServiceImpl implements RequestService {
         return findAll().stream()
                 .filter(request -> request.getTrip().getDriver().getId() == id)
                 .filter(request -> request.getTrip().getFreeSeats() > 0)
-                .filter(request -> request.getStatus().equals(RequestStatus.UNDER_CONSIDERATION))
+                .filter(request -> request.getRequestStatus().equals(RequestStatus.UNDER_CONSIDERATION))
                 .collect(Collectors.toList());
     }
 
@@ -60,20 +60,24 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void createRequest(User user, Trip trip) {
-        Request request = new Request(RequestStatus.UNDER_CONSIDERATION, user, trip);
+    public void createRequest(User user, Trip trip, int passengersNumber) {
+        Request request = new Request();
+        request.setRequestStatus(RequestStatus.UNDER_CONSIDERATION)
+                .setPassenger(user)
+                .setTrip(trip)
+                .setPassengersNumber(passengersNumber);
         save(request);
     }
 
     @Override
     public void approveRequest(Request request) {
-        request.setStatus(RequestStatus.APPROVED);
+        request.setRequestStatus(RequestStatus.APPROVED);
         save(request);
     }
 
     @Override
     public void disapproveRequest(Request request) {
-        request.setStatus(RequestStatus.REJECTED);
+        request.setRequestStatus(RequestStatus.REJECTED);
         save(request);
     }
 
@@ -86,8 +90,8 @@ public class RequestServiceImpl implements RequestService {
     public List<Request> findAllApprovedForCompletedTripByTripId(long id) {
         return findAll().stream()
                 .filter(request -> request.getTrip().getId() == id)
-                .filter(request -> request.getTrip().getStatus().equals(TripStatus.COMPLETED))
-                .filter(request -> request.getStatus().equals(RequestStatus.APPROVED))
+                .filter(request -> request.getTrip().getTripStatus().equals(TripStatus.COMPLETED))
+                .filter(request -> request.getRequestStatus().equals(RequestStatus.APPROVED))
                 .collect(Collectors.toList());
     }
 }

@@ -72,12 +72,12 @@ public class RequestController {
         return view;
     }
 
-    @PostMapping("/createRequest/{id}")
-    public String createRequest(@PathVariable("id") long id) {
+    @PostMapping("/createRequest/{id}/{passengersNumber}")
+    public String createRequest(@PathVariable("id") long id, @PathVariable("passengersNumber") int passengersNumber) {
         try {
             Trip trip = tripService.findById(id);
             User user = AuthUtils.getUserFromContext();
-            requestService.createRequest(user, trip);
+            requestService.createRequest(user, trip, passengersNumber);
         } catch (TripNotFoundException e) {
             LOGGER.error(e.getMessage());
         }

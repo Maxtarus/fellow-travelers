@@ -1,11 +1,14 @@
 package ru.sber.fellow_travelers.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import ru.sber.fellow_travelers.entity.enums.RoleType;
 
 import java.util.List;
 
+@Getter
 @Entity
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
@@ -19,35 +22,8 @@ public class Role implements GrantedAuthority {
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
-    public Role() { }
-
-    public Role(long id, RoleType type) {
-        this.id = id;
-        this.type = type;
-    }
-
-    public Role(RoleType type) {
-        this.type = type;
-    }
-
     @Override
     public String getAuthority() {
         return "ROLE_" + type;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public RoleType getType() {
-        return type;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setRole(RoleType type) {
-        this.type = type;
     }
 }

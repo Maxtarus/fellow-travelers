@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>История поездок</title>
+    <link rel="stylesheet" th:href="@{/css/review_style.css}">
+    <link rel="stylesheet" th:href="@{/css/main_style.css}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"/>
+    <script th:src="@{/js/script.js}"></script>
+</head>
+<body>
+    <div class="root-wrap">
+        <header>
+            <div class="header">
+                <div class="header_wrapper middle-wrap">
+                    <div class="header_logo">
+                        <img th:src="@{/images/eazy_trip.png}" alt="" style="width: 70%">
+                    </div>
+                    <div class="nav-panel" style="margin-top: 10px; margin-bottom: 10px">
+                        <ul class="flex item-center space-x-1 p-1 border border-gray-100 rounded-lg bg-gray-50" style="text-align: center; width: 120%">
+                            <li style="width: 100%">
+                                <a th:href="@{/searchTrips}"
+                                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                    Найти поездку
+                                </a>
+                            </li>
+                            <li style="width: 100%">
+                                <a th:href="@{/activeRequests}"
+                                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                    Мои заявки
+                                </a>
+                            </li>
+                            <li style="width: 100%">
+                                <a th:href="@{/passengerTripsHistory}"
+                                   class="block py-2 pl-3 pr-4 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700">
+                                    История поездок
+                                </a>
+                            </li>
+                            <li style="width: 100%">
+                                <a th:href="@{/logout}"
+                                   class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700"
+                                   aria-current="page">Выйти из системы</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <button aria-label="Профиль" aria-controls="user-menu" aria-expanded="false" type="button">
+                        <div class="user">
+                            <img src="https://cdn.blablacar.com/comuto3/images/avatar/pixar/passenger-m-02.svg" alt="">
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </header>
+    </div>
+    <form th:method="POST" th:action="@{/leaveReview(tripId=${review.trip.id})}" th:object="${review}">
+        <div class="wrapper">
+            <div class="title">Как вам поездка?</div>
+            <div class="rate-box">
+                <input th:field="*{markType}" type="radio" name="star" id="star0" th:value="${review.markType.EXCELLENT}"/>
+                <label class="star" for="star0"></label>
+                <input th:field="*{markType}" type="radio" name="star" id="star1" th:value="${review.markType.GOOD}"/>
+                <label class="star" for="star1"></label>
+                <input th:field="*{markType}" type="radio" name="star" id="star2" th:value="${review.markType.NORMAL}"/>
+                <label class="star" for="star2"></label>
+                <input th:field="*{markType}" type="radio" name="star" id="star3" th:value="${review.markType.EXPECTATIONS_NOT_FULFILLED}"/>
+                <label class="star" for="star3"></label>
+                <input th:field="*{markType}" type="radio" name="star" id="star4" th:value="${review.markType.DISLIKE}"/>
+                <label class="star" for="star4"></label>
+                <script type="text/javascript">
+                    $.ajax({
+                        type: "POST",
+                        url: "/leaveReview",
+                        data: {
+                            mark: document.querySelector('input[name="star"]:checked').value,
+                        }
+                    })
+                </script>
+            </div>
+            <textarea th:field="*{comment}" th:value="${review.comment}" cols="30" rows="6" placeholder="Оставьте комментарий"></textarea>
+            <button type="submit" class="search-btn" style="background: #588f27; width: 20%">
+                Отправить
+            </button>
+        </div>
+    </form>
+</body>
+</html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Добавление пользователя</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" />
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{main_style.css}">
 </head>
 <body>
     <form class="max-w-sm mx-auto" id="registerForm" th:object="${user}" method="POST" th:action="@{/addUser}">

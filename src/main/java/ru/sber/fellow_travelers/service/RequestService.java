@@ -13,7 +13,7 @@ public interface RequestService {
     List<Request> findAllByPassengerId(long id);
     List<Request> findAvailableByDriverId(long id);
     void deleteById(long id);
-    void createRequest(User user, Trip trip);
+    void createRequest(User user, Trip trip, int passengersNumber);
     void approveRequest(Request request);
     void disapproveRequest(Request request);
     List<Request> findAllApprovedForCompletedTripsByPassenger(User passenger);

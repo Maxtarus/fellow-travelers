@@ -1,12 +1,18 @@
 package ru.sber.fellow_travelers.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.Accessors;
 import ru.sber.fellow_travelers.entity.enums.RequestStatus;
 
-import java.util.Objects;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Accessors(chain = true)
+@Builder
 @Entity
 @Table(name = "requests")
+@ToString(exclude = {"passenger", "trip"})
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,71 +20,13 @@ public class Request {
     private Long id;
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private RequestStatus status;
+    private RequestStatus requestStatus;
+    @Column(name = "passengers_number", nullable = false)
+    private Integer passengersNumber;
     @ManyToOne
     @JoinColumn(name = "passenger_id", nullable = false)
     private User passenger;
     @ManyToOne
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
-
-    public Request() { }
-
-    public Request(RequestStatus status, User passenger, Trip trip) {
-        this.status = status;
-        this.passenger = passenger;
-        this.trip = trip;
-    }
-
-    public Request(Long id, RequestStatus status, User passenger, Trip trip) {
-        this.id = id;
-        this.status = status;
-        this.passenger = passenger;
-        this.trip = trip;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public RequestStatus getStatus() {
-        return status;
-    }
-
-    public User getPassenger() {
-        return passenger;
-    }
-
-    public Trip getTrip() {
-        return trip;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setStatus(RequestStatus status) {
-        this.status = status;
-    }
-
-    public void setPassenger(User passenger) {
-        this.passenger = passenger;
-    }
-
-    public void setTrip(Trip trip) {
-        this.trip = trip;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Request request = (Request) o;
-        return Objects.equals(id, request.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

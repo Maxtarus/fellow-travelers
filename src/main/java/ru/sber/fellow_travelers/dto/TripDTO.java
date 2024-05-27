@@ -2,9 +2,9 @@ package ru.sber.fellow_travelers.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import ru.sber.fellow_travelers.entity.Mark;
+import ru.sber.fellow_travelers.entity.Review;
 import ru.sber.fellow_travelers.entity.enums.TripStatus;
-import ru.sber.fellow_travelers.google_maps_api.Coordinates;
+import ru.sber.fellow_travelers.yandex_geocoder.response.Coordinates;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class TripDTO {
     private UserDTO driver;
     private Coordinates startPointCoordinates;
     private Coordinates finalPointCoordinates;
-    private List<Mark> marks = new ArrayList<>();
+    private List<Review> reviews = new ArrayList<>();
 
     public TripDTO() { }
 
@@ -125,12 +125,12 @@ public class TripDTO {
         this.driver = driver;
     }
 
-    public List<Mark> getMarks() {
-        return marks;
+    public List<Review> getMarks() {
+        return reviews;
     }
 
-    public void setMarks(List<Mark> marks) {
-        this.marks = marks;
+    public void setMarks(List<Review> reviews) {
+        this.reviews = reviews;
     }
 
     public Coordinates getStartPointCoordinates() {

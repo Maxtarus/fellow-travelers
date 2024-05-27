@@ -3,22 +3,22 @@ package ru.sber.fellow_travelers.controller;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.sber.fellow_travelers.dto.DriverDTO;
-import ru.sber.fellow_travelers.dto.MarkTripDTO;
+import ru.sber.fellow_travelers.dto.ReviewTripDTO;
 import ru.sber.fellow_travelers.dto.TripDTO;
 import ru.sber.fellow_travelers.dto.UserDTO;
-import ru.sber.fellow_travelers.entity.Mark;
+import ru.sber.fellow_travelers.entity.Review;
 import ru.sber.fellow_travelers.entity.Request;
 import ru.sber.fellow_travelers.entity.Trip;
 import ru.sber.fellow_travelers.entity.User;
 import ru.sber.fellow_travelers.entity.enums.MarkType;
 import ru.sber.fellow_travelers.entity.enums.TripStatus;
 import ru.sber.fellow_travelers.exception.TripNotFoundException;
-import ru.sber.fellow_travelers.google_maps_api.GeoService;
 import ru.sber.fellow_travelers.mapper.DriverMapper;
 import ru.sber.fellow_travelers.mapper.TripMapper;
 import ru.sber.fellow_travelers.mapper.UserMapper;
@@ -26,8 +26,10 @@ import ru.sber.fellow_travelers.security.utils.AuthUtils;
 import ru.sber.fellow_travelers.service.RequestService;
 import ru.sber.fellow_travelers.service.TripService;
 import ru.sber.fellow_travelers.thymeleaf.Counter;
+import ru.sber.fellow_travelers.util.DateTimeUtils;
+import ru.sber.fellow_travelers.yandex_geocoder.service.YandexGeocoderService;
 
-import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,14 +41,14 @@ public class TripController {
     private static final Logger LOGGER = LogManager.getLogger(TripController.class);
     private final TripService tripService;
     private final RequestService requestService;
-    private final GeoService geoService;
+    private final YandexGeocoderService geoService;
     private final UserMapper userMapper;
     private final DriverMapper driverMapper;
     private final TripMapper tripMapper;
 
     public TripController(TripService tripService,
                           RequestService requestService,
-                          GeoService geoService, UserMapper userMapper, DriverMapper driverMapper, TripMapper tripMapper) {
+                          YandexGeocoderService geoService, UserMapper userMapper, DriverMapper driverMapper, TripMapper tripMapper) {
         this.tripService = tripService;
         this.requestService = requestService;
         this.geoService = geoService;
@@ -104,15 +106,15 @@ public class TripController {
 
         for (Request request : allApprovedRequestsForTrip) {
             User passenger = request.getPassenger();
-            List<Mark> marksFromPassenger = passenger.getMarksFromUsers();
+            List<Review> marksFromPassenger = passenger.getMarksFromUsers();
 
             if (marksFromPassenger.isEmpty()) {
                 marksByPassengers.put(userMapper.toDTO(passenger), null);
             }
 
-            for (Mark mark : marksFromPassenger) {
-                if (mark.getTrip().getId() == id) {
-                    marksByPassengers.put(userMapper.toDTO(passenger), mark.getMarkType());
+            for (Review review : marksFromPassenger) {
+                if (review.getTrip().getId() == id) {
+                    marksByPassengers.put(userMapper.toDTO(passenger), review.getMarkType());
                 }
             }
         }
@@ -128,7 +130,7 @@ public class TripController {
         User user = AuthUtils.getUserFromContext();
 
         List<Request> approvedRequestsForCompletedTrips = requestService.findAllApprovedForCompletedTripsByPassenger(user);
-        List<MarkTripDTO> markTripDTOs = new ArrayList<>();
+        List<ReviewTripDTO> reviewTripDTOS = new ArrayList<>();
 
         for (Request request : approvedRequestsForCompletedTrips) {
             TripDTO tripDTO = tripMapper.toDTO(request.getTrip());
@@ -136,24 +138,24 @@ public class TripController {
             tripDTO.setStartPointCoordinates(geoService.getPointCoordinates(tripDTO.getStartPoint()));
             tripDTO.setFinalPointCoordinates(geoService.getPointCoordinates(tripDTO.getFinalPoint()));
 
-            if (!request.getTrip().getMarks().isEmpty()) {
+            if (!request.getTrip().getReviews().isEmpty()) {
 
-                if (request.getTrip().getMarks()
+                if (request.getTrip().getReviews()
                         .stream()
                         .anyMatch(m -> m.getFromUser().equals(user))) {
-                    Mark mark = request.getTrip().getMarks().stream().filter(m -> m.getFromUser().equals(user)).findAny().get();
-                    MarkTripDTO markTrip = new MarkTripDTO(tripDTO, mark);
-                    markTripDTOs.add(markTrip);
+                    Review review = request.getTrip().getReviews().stream().filter(m -> m.getFromUser().equals(user)).findAny().get();
+                    ReviewTripDTO reviewTrip = new ReviewTripDTO(tripDTO, review);
+                    reviewTripDTOS.add(reviewTrip);
                 } else {
-                    markTripDTOs.add(new MarkTripDTO(tripDTO, new Mark()));
+                    reviewTripDTOS.add(new ReviewTripDTO(tripDTO, new Review()));
                 }
             } else {
-                markTripDTOs.add(new MarkTripDTO(tripDTO, new Mark()));
+                reviewTripDTOS.add(new ReviewTripDTO(tripDTO, new Review()));
             }
         }
 
-        view.addObject("markTrip", new MarkTripDTO());
-        view.addObject("markTripDTOs", markTripDTOs);
+        view.addObject("reviewTrip", new ReviewTripDTO());
+        view.addObject("reviewTripDTOS", reviewTripDTOS);
         view.addObject("user", user);
         view.addObject("counter", new Counter());
         return view;
@@ -176,23 +178,41 @@ public class TripController {
         return view;
     }
 
-    @GetMapping("/availableTrips")
+    @GetMapping("/searchTrips")
     public ModelAndView showPassengerProfile() {
-        ModelAndView view = new ModelAndView("passenger/availableTrips");
-        User user = AuthUtils.getUserFromContext();
-
-        List<Trip> trips = tripService.findAllAvailableForPassenger(user);
-        List<TripDTO> tripDTOs = new ArrayList<>();
-
-        for (Trip trip : trips) {
-            tripDTOs.add(tripMapper.toDTO(trip));
-        }
-
-        view.addObject("user", user);
-        view.addObject("trips", tripDTOs);
-        view.addObject("counter", new Counter());
-        return view;
+        return new ModelAndView("passenger/searchTrip");
     }
+
+    @GetMapping("/foundTrips")
+    public Object showFoundTrips(@RequestParam("startPoint") String startPoint,
+                               @RequestParam("finalPoint") String finalPoint,
+                               @RequestParam("departureDate") LocalDate departureDate,
+                               @RequestParam("passengersNumber") int passengersNumber) {
+
+        if (startPoint != null && finalPoint != null) {
+            User user = AuthUtils.getUserFromContext();
+            List<Trip> foundedTrips = tripService.findAllAvailableForPassenger(user, passengersNumber, startPoint, finalPoint, departureDate);
+            List<TripDTO> tripDTOs = new ArrayList<>();
+
+            for (Trip trip : foundedTrips) {
+                tripDTOs.add(tripMapper.toDTO(trip));
+            }
+
+            ModelAndView view = new ModelAndView("passenger/foundTrips");
+            view.addObject("trips", tripDTOs);
+            view.addObject("startPoint", startPoint);
+            view.addObject("finalPoint", finalPoint);
+            view.addObject("departureDate", departureDate);
+            view.addObject("passengersNumber", passengersNumber);
+            view.addObject("user", user);
+            view.addObject("counter", new Counter());
+
+            return view;
+        } else {
+            return "redirect:/searchTrips";
+        }
+    }
+
 
     @GetMapping("/createTrip")
     public ModelAndView showCreateTripPage() {
@@ -259,7 +279,7 @@ public class TripController {
         trip.setId(id);
         User driver = AuthUtils.getUserFromContext();
         trip.setDriver(driver);
-        trip.setStatus(TripStatus.NOT_COMPLETED);
+        trip.setTripStatus(TripStatus.NOT_COMPLETED);
         tripService.save(trip);
         return "redirect:/createdTrips";
     }
